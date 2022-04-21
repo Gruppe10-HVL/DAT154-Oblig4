@@ -5,9 +5,14 @@ namespace DAT154Oblig4.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
-    DbSet<TodoList> TodoLists { get; }
 
-    DbSet<TodoItem> TodoItems { get; }
+    DbSet<Customer> Customers { get; set; }
+
+    DbSet<Room> Rooms { get; set; }
+
+    DbSet<ServiceTask> ServiceTasks { get; set; }
+
+    DbSet<Booking> Bookings { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

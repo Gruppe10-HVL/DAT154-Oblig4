@@ -2,14 +2,12 @@ using DAT154Oblig4.Application;
 using DAT154Oblig4.Application.Common.Interfaces;
 using DAT154Oblig4.Infrastructure;
 using DAT154Oblig4.Infrastructure.Persistence;
-using DAT154Oblig4.WebUI.Filters;
-using DAT154Oblig4.WebUI.Services;
+using DAT154Oblig4.Api.Filters;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using NSwag;
-using NSwag.Generation.Processors.Security;
+using Microsoft.OpenApi.Models;
 
-namespace DAT154Oblig4.WebUI;
+namespace DAT154Oblig4.Api;
 
 public class Startup
 {
@@ -34,36 +32,23 @@ public class Startup
         services.AddHealthChecks()
             .AddDbContextCheck<ApplicationDbContext>();
 
-        services.AddControllersWithViews(options =>
+        services.AddControllers(options =>
             options.Filters.Add<ApiExceptionFilterAttribute>())
                 .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
 
-        services.AddRazorPages();
-
-        // Customise default API behaviour
-        services.Configure<ApiBehaviorOptions>(options => 
+        services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
 
-        // In production, the Angular files will be served from this directory
-        services.AddSpaStaticFiles(configuration => 
-            configuration.RootPath = "ClientApp/dist");
-
-        services.AddOpenApiDocument(configure =>
+        services.AddSwaggerGen(x =>
         {
-            configure.Title = "DAT154Oblig4 API";
-            configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+            x.SwaggerDoc("v1", new OpenApiInfo
             {
-                Type = OpenApiSecuritySchemeType.ApiKey,
-                Name = "Authorization",
-                In = OpenApiSecurityApiKeyLocation.Header,
-                Description = "Type into the textbox: Bearer {your JWT token}."
+                Title = "DAT154Oblig4 API",
+                Version = "v1"
             });
-
-            configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         });
     }
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
@@ -74,35 +59,23 @@ public class Startup
         else
         {
             app.UseExceptionHandler("/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 
         app.UseHealthChecks("/health");
         app.UseHttpsRedirection();
         app.UseStaticFiles();
-        if (!env.IsDevelopment())
-        {
-            app.UseSpaStaticFiles();
-        }
 
-        app.UseSwaggerUi3(settings =>
-        {
-            settings.Path = "/api";
-            settings.DocumentPath = "/api/specification.json";
-        });
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DAT154Oblig4 API"));
 
         app.UseRouting();
 
         app.UseAuthentication();
-        app.UseIdentityServer();
         app.UseAuthorization();
-        app.UseEndpoints(endpoints =>
+        app.UseEndpoints(e =>
         {
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller}/{action=Index}/{id?}");
-            endpoints.MapRazorPages();
+            e.MapControllers();
         });
     }
 }

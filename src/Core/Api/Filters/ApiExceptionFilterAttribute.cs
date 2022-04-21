@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace DAT154Oblig4.WebUI.Filters;
+namespace DAT154Oblig4.Api.Filters;
 
 public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 {
@@ -15,7 +15,6 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         // Register known exception types and handlers.
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
-                { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
@@ -45,20 +44,6 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         }
 
         HandleUnknownException(context);
-    }
-
-    private void HandleValidationException(ExceptionContext context)
-    {
-        var exception = (ValidationException)context.Exception;
-
-        var details = new ValidationProblemDetails(exception.Errors)
-        {
-            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
-        };
-
-        context.Result = new BadRequestObjectResult(details);
-
-        context.ExceptionHandled = true;
     }
 
     private void HandleInvalidModelStateException(ExceptionContext context)

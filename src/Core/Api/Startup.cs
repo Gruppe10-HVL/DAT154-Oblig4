@@ -6,6 +6,12 @@ using DAT154Oblig4.Api.Filters;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using DAT154Oblig4.Application.Common.Identity;
+using DAT154Oblig4.Api.Extensions;
 
 namespace DAT154Oblig4.Api;
 
@@ -18,7 +24,6 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddApplication();
@@ -26,9 +31,8 @@ public class Startup
 
         services.AddDatabaseDeveloperPageExceptionFilter();
 
-
         services.AddHttpContextAccessor();
-
+        services.AddSingleton<IAuthentication, Authentication>();
         services.AddHealthChecks()
             .AddDbContextCheck<ApplicationDbContext>();
 
@@ -39,6 +43,17 @@ public class Startup
         services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
 
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Secret"]))
+                };
+            });
         services.AddSwaggerGen(x =>
         {
             x.SwaggerDoc("v1", new OpenApiInfo
@@ -46,6 +61,8 @@ public class Startup
                 Title = "DAT154Oblig4 API",
                 Version = "v1"
             });
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+            x.IncludeXmlComments(xmlPath);
         });
     }
 

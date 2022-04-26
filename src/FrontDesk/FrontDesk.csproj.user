@@ -37,18 +37,6 @@
     <Compile Update="Pages\RoomPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControlCustomers.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="UserControlHome.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="UserControlReservations.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="UserControlRooms.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Controls\BackButton.xaml">
@@ -82,18 +70,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\RoomPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControlCustomers.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControlHome.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControlReservations.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControlRooms.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

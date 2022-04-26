@@ -1,5 +1,5 @@
-﻿using DAT154Oblig4.Application.CustomerCommands;
-using DAT154Oblig4.Application.CustomerQueries;
+﻿using DAT154Oblig4.Application.Customers.Commands;
+using DAT154Oblig4.Application.Customers.Queries;
 using DAT154Oblig4.Application.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,17 +11,28 @@ namespace DAT154Oblig4.Api.Controllers
     public class CustomerController : ApiControllerBase
     {
         /// <summary>
-        /// Gets all users
+        /// Gets all customer ids
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers(){
-            var customers = await Mediator.Send(new GetAllUsersQuery());
+        public async Task<ActionResult<IEnumerable<int>>> GetAllCustomers(){
+            var customers = await Mediator.Send(new GetAllCustomersQuery());
             if (customers == null) return NotFound();
             return Ok(customers);
         }
 
         /// <summary>
-        /// Registers a new user and returns created object with JWT
+        /// Gets customer by id
+        /// </summary>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
+        {
+            var customer = await Mediator.Send(new GetCustomerByIdQuery());
+            if (customer == null) return NotFound();
+            return Ok(customer);
+        }
+
+        /// <summary>
+        /// Registers a new customer and returns created object with JWT
         /// </summary>
         /// <param name="request">Name, Username and Password</param>
         /// <returns></returns>
@@ -34,7 +45,7 @@ namespace DAT154Oblig4.Api.Controllers
         }
 
         /// <summary>
-        /// Logs in user, returns JWT
+        /// Logs in customer, returns JWT as proof of auth
         /// </summary>
         /// <param name="request">Username and Password</param>
         [HttpPost("login")]

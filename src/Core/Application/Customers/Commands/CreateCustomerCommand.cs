@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using DAT154Oblig4.Application.Common.Identity;
 using DAT154Oblig4.Domain.Entities;
 
-namespace DAT154Oblig4.Application.CustomerCommands
+namespace DAT154Oblig4.Application.Customers.Commands
 {
         public class CreateCustomerCommand : IRequest<CustomerAuthDto>
         {
@@ -33,7 +33,7 @@ namespace DAT154Oblig4.Application.CustomerCommands
             {
                 var newCustomer = new Customer(request.Name, request.Username, request.Password);
 
-                await _context.Customers.AddAsync(newCustomer);
+                await _context.Customers.AddAsync(newCustomer, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
 
                 CustomerDto mappedCustomer = _mapper.Map<CustomerDto>(newCustomer);

@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using DAT154Oblig4.Application.Common.Identity;
 
-namespace DAT154Oblig4.Application.CustomerCommands
+namespace DAT154Oblig4.Application.Customers.Commands
 {
     public class LoginCustomerCommand : IRequest<CustomerAuthDto>
     {
@@ -29,7 +29,7 @@ namespace DAT154Oblig4.Application.CustomerCommands
 
         public async Task<CustomerAuthDto> Handle(LoginCustomerCommand request, CancellationToken cancellationToken)
         {
-            var customer = await _context.Customers.Where(x => x.Username == request.Username && x.Password == request.Password).FirstOrDefaultAsync();
+            var customer = await _context.Customers.Where(x => x.Username == request.Username && x.Password == request.Password).FirstOrDefaultAsync(cancellationToken);
 
             if (customer == null) return null;
             CustomerDto mappedCustomer = _mapper.Map<CustomerDto>(customer);

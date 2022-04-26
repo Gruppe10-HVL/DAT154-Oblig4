@@ -6,7 +6,7 @@ namespace DAT154Oblig4.Domain.Entities
     public class ServiceTask
     {
         public int Id { get; set; }
-        public Room Room { get; set; }
+        public virtual Room Room { get; set; }
         public string Description { get; set; }
         public ServiceTaskType TaskType { get; set; }
         public ServiceTaskStatus TaskStatus { get; set; }

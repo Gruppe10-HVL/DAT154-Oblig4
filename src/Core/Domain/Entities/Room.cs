@@ -8,9 +8,14 @@ namespace DAT154Oblig4.Domain.Entities
         public int BedCount { get; set; }
         public int Size { get; set; }
         public RoomQuality Quality { get; set; }
-
-        public Room() { }
-        public Room(int bedCount, int size, RoomQuality quality)
+        public virtual ICollection<ServiceTask> ServiceTasks { get; set; }
+        public virtual ICollection<Booking> Bookings { get; set; }
+        public Room() 
+        {
+            ServiceTasks = new List<ServiceTask>();
+            Bookings = new List<Booking>();
+        }
+        public Room(int bedCount, int size, RoomQuality quality) : this()
         {
             BedCount = bedCount;
             Size = size;

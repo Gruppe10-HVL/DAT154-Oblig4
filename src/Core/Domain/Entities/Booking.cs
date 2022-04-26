@@ -1,4 +1,5 @@
-﻿
+﻿using DAT154Oblig4.Domain.Enums.Booking;
+
 namespace DAT154Oblig4.Domain.Entities
 {
     public class Booking
@@ -11,11 +12,9 @@ namespace DAT154Oblig4.Domain.Entities
         public int RoomId { get; set; }
         public Room Room { get; set; }
 
-        public bool CheckedIn { get; set; }
+        public BookingStatus Status { get; set; }
         public DateTime BookingStart { get; set; }
         public DateTime BookingEnd { get; set; }
-        public bool CheckedOut { get; set; }
-        public bool Cancelled { get; set; }
 
         public Booking() { }
 
@@ -23,21 +22,18 @@ namespace DAT154Oblig4.Domain.Entities
         {
             CustomerId = customerId;
             RoomId = roomId;
-            CheckedIn = false;
+            Status = BookingStatus.NotStarted;
             BookingStart = bookingStart;
             BookingEnd = bookingEnd;
-            CheckedOut = false;
-            Cancelled = false;
         }
+
         public Booking(int customerId, int roomId, bool checkedIn, DateTime bookingStart, DateTime bookingEnd)
         {
             CustomerId = customerId;
             RoomId = roomId;
-            CheckedIn = checkedIn;
+            Status = checkedIn ? BookingStatus.CheckedIn : BookingStatus.NotStarted;
             BookingStart = bookingStart;
             BookingEnd = bookingEnd;
-            CheckedOut = false;
-            Cancelled = false;
         }
     }
 }

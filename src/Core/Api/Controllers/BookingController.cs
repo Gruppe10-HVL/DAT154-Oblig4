@@ -1,5 +1,7 @@
-﻿using DAT154Oblig4.Application.Dto;
-using Microsoft.AspNetCore.Authorization;
+﻿using DAT154Oblig4.Application.Bookings.Commands;
+using DAT154Oblig4.Application.Bookings.Queries;
+using DAT154Oblig4.Application.Dto;
+using DAT154Oblig4.Domain.Enums.Booking;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -17,6 +19,7 @@ namespace DAT154Oblig4.Api.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        //Borked, fix later
         public int CustomerId => Int32.Parse(_httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name).Value);
             
         /// <summary>
@@ -27,8 +30,9 @@ namespace DAT154Oblig4.Api.Controllers
         public async Task<ActionResult<IEnumerable<int>>> GetAllOwnBookings()
         {
             var customerId = CustomerId;
-            Console.WriteLine(customerId);
-            return Ok();
+            var bookings = await Mediator.Send(new GetBookingsByCustomerId() { CustomerId = customerId });
+            if (bookings == null) return NotFound();
+            return Ok(bookings);
         }
 
         /// <summary>
@@ -37,16 +41,31 @@ namespace DAT154Oblig4.Api.Controllers
         [HttpGet("customer/{id}")]
         public async Task<ActionResult<IEnumerable<int>>> GetAllCustomerBookings(int id)
         {
-            return Ok();
+            var bookings = await Mediator.Send(new GetBookingsByCustomerId() { CustomerId = id });
+            if (bookings == null) return NotFound();
+            return Ok(bookings);
+        }
+
+        /// <summary>
+        /// Get booking by id
+        /// </summary>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<int>>> GetAllBookings()
+        {
+            var bookings = await Mediator.Send(new GetAllBookingsQuery());
+            if (bookings == null) return NotFound();
+            return Ok(bookings);
         }
 
         /// <summary>
         /// Get booking by id
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookingDto>> GetBookingById()
+        public async Task<ActionResult<BookingDto>> GetBookingById(int id)
         {
-            return Ok();
+            var booking = await Mediator.Send(new GetBookingByIdQuery() { Id = id });
+            if (booking == null) return NotFound();
+            return Ok(booking);
         }
 
         /// <summary>
@@ -54,37 +73,45 @@ namespace DAT154Oblig4.Api.Controllers
         /// </summary>
         /// <remarks>Customer endpoint</remarks>
         [HttpPost("customer")]
-        public async Task<ActionResult<BookingDto>> CreateOwnBooking()
+        public async Task<ActionResult<BookingDto>> CreateOwnBooking(int roomId, DateTime startDate, DateTime endDate)
         {
             var customerId = CustomerId;
-            return Ok();
+            var booking = await Mediator.Send(new CreateBookingCommand(customerId, roomId, startDate, endDate));
+            if (booking == null) return NotFound();
+            return Ok(booking);
         }
 
         /// <summary>
         /// Create booking for user 
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult<BookingDto>> CreateBookingForCustomer()
+        public async Task<ActionResult<BookingDto>> CreateBookingForCustomer(CreateBookingCommand request)
         {
-            return Ok();
+            var booking = await Mediator.Send(request);
+            if (booking == null) return NotFound();
+            return Ok(booking);
         }
 
         /// <summary>
         /// Set booking to checked in  
         /// </summary>
         [HttpPatch("checkin")]
-        public async Task<ActionResult<BookingDto>> CheckInBooking()
+        public async Task<ActionResult<BookingDto>> CheckInBooking(int id)
         {
-            return Ok();
+            var booking = await Mediator.Send(new ChangeBookingStatusCommand() { Id = id, Status = BookingStatus.CheckedIn});
+            if (booking == null) return NotFound();
+            return Ok(booking);
         }
 
         /// <summary>
         /// Set booking to checked out -> Also create new ServiceTask (Cleanup)  
         /// </summary>
         [HttpPatch("checkout")]
-        public async Task<ActionResult<BookingDto>> CheckOutBooking()
+        public async Task<ActionResult<BookingDto>> CheckOutBooking(int id)
         {
-            return Ok();
+            var booking = await Mediator.Send(new ChangeBookingStatusCommand() { Id = id, Status = BookingStatus.CheckedOut });
+            if (booking == null) return NotFound();
+            return Ok(booking);
         }
 
         /// <summary>
@@ -92,18 +119,22 @@ namespace DAT154Oblig4.Api.Controllers
         /// </summary>
         /// <remarks>Customer endpoint</remarks>
         [HttpPatch("customer/cancel")]
-        public async Task<ActionResult<BookingDto>> CancelOwnBooking()
+        public async Task<ActionResult<BookingDto>> CancelOwnBooking(int id)
         {
-            var customerId = CustomerId;
-            return Ok();
+            var booking = await Mediator.Send(new ChangeBookingStatusCommand() { Id = id, Status = BookingStatus.CheckedOut });
+            if (booking == null) return NotFound();
+            return Ok(booking);
         }
+
         /// <summary>
         /// Cancel booking 
         /// </summary>
         [HttpPatch("cancel")]
-        public async Task<ActionResult<BookingDto>> CancelBooking()
+        public async Task<ActionResult<BookingDto>> CancelBooking(int id)
         {
-            return Ok();
+            var booking = await Mediator.Send(new ChangeBookingStatusCommand() { Id = id, Status = BookingStatus.CheckedOut });
+            if (booking == null) return NotFound();
+            return Ok(booking);
         }
 
     }

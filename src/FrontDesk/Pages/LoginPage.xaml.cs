@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using FrontDesk.Operations;
+using FrontDesk.Data;
 
 namespace FrontDesk.Pages
 {
@@ -31,8 +31,6 @@ namespace FrontDesk.Pages
         {
             string Username = tbxUsername.Text;
             string password = pbxPassword.Password;
-
-            ApiClient client = new ApiClient();
 
             NavigationService.Navigate(new DashboardPage());
         }

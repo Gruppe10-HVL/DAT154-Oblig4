@@ -13,16 +13,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FrontDesk
+namespace FrontDesk.Controls
 {
     /// <summary>
-    /// Interaction logic for UserControlReservations.xaml
+    /// Interaction logic for SingleInputUserControl.xaml
     /// </summary>
-    public partial class UserControlReservations : UserControl
+    public partial class SingleInputUserControl : UserControl
     {
-        public UserControlReservations()
+        public SingleInputUserControl()
         {
             InitializeComponent();
+            this.DataContext = this;
         }
+
+        public String Title { get; set; }
     }
 }

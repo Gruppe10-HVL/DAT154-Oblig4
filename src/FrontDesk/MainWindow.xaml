@@ -12,8 +12,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:FrontDesk"
+        xmlns:constants="clr-namespace:FrontDesk.Constants"
+        xmlns:pages="clr-namespace:FrontDesk.Pages;assembly="
         mc:Ignorable="d"
-        Title="Front Desk" Height="600" Width="1080" WindowStartupLocation="CenterScreen" Cursor="AppStarting" WindowStyle="None">
+        Title="Front Desk" 
+        Height="{Binding Source={x:Static constants:Constants.ApplicationHeight}}" 
+        Width="{Binding Source={x:Static constants:Constants.ApplicationWidth}}" 
+        WindowStartupLocation="CenterScreen" Cursor="AppStarting" WindowStyle="None">
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
@@ -39,8 +44,10 @@
     </Window.Triggers>
     
     <Grid>
-        <Grid x:Name="GridMain" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="540" Width="1010" />
-        
+        <Grid x:Name="GridMain" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="540" Width="1010">
+            <Frame x:Name="frame" Content="Frame" Source="/FrontDesk;component/Pages/LoginPage.xaml" NavigationUIVisibility="Visible" />
+        </Grid>
+
         <!--Navbar-->
         <Grid Height="60" VerticalAlignment="Top" Background="#3b3c40">
             <Grid.Effect>
@@ -53,7 +60,7 @@
                         <Button Content="Settings" />
                         <Button Content="Help" />
                         <Separator />
-                        <Button Content="Exit" />
+                        <Button Content="Logout" Click="ButtonLogout_Click"/>
                     </StackPanel>
                 </materialDesign:PopupBox>
                 <Button x:Name="ButtonExitApplication" VerticalAlignment="Center" HorizontalAlignment="Right" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" Margin="10"

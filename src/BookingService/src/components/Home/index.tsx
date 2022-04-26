@@ -12,8 +12,6 @@ export const Home = () => {
   useEffect(() => {
     const storageUser = localStorage.getItem('user')
     if (storageUser) setUser(JSON.parse(storageUser))
-    console.log(storageUser)
-    console.log(user)
   }, [])
 
   return (

@@ -14,28 +14,34 @@ export const Register = () => {
   const handleRegister = async (event: SyntheticEvent) => {
     event.preventDefault()
 
-    const form = {
-      name,
-      username,
-      password,
+    if (name !== '' && username !== '' && password !== '') {
+      const form = {
+        name,
+        username,
+        password,
+      }
+
+      await axios
+        .post('https://localhost:5001/api/v1/customer', form)
+        .then(res => {
+          if (res.data?.jwt) {
+            localStorage.setItem(
+              'user',
+              JSON.stringify({
+                name: res.data.customer.name,
+                jwt: res.data.jwt,
+              }),
+            )
+
+            window.dispatchEvent(new Event('storage'))
+
+            navigate('/')
+          }
+        })
+        .catch(err => setError(err.message))
+    } else {
+      setError('Fields cannot be empty')
     }
-
-    await axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/api/v1/customer`, form)
-      .then(res => {
-        if (res.data?.jwt) {
-          localStorage.setItem(
-            'user',
-            JSON.stringify({
-              name: res.data.customer.name,
-              jwt: res.data.jwt,
-            }),
-          )
-
-          navigate('/')
-        }
-      })
-      .catch(err => setError(err.message))
   }
 
   return (

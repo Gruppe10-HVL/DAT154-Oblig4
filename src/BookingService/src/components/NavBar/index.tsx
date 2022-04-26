@@ -7,8 +7,16 @@ export const NavBar = () => {
   const [user, setUser] = useState<User>()
 
   useEffect(() => {
-    const storageUser = localStorage.getItem('user')
-    if (storageUser) setUser(JSON.parse(storageUser))
+    const getUser = () => {
+      const storageUser = localStorage.getItem('user')
+      if (storageUser) setUser(JSON.parse(storageUser))
+    }
+
+    getUser()
+
+    window.addEventListener('storage', getUser)
+
+    return () => window.removeEventListener('storage', getUser)
   }, [])
 
   return (

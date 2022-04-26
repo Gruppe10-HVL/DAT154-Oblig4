@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using FrontDesk.Pages;
+
 namespace FrontDesk
 {
     /// <summary>
@@ -37,6 +39,11 @@ namespace FrontDesk
             ButtonOpenMenu.Visibility = Visibility.Visible;
         }
 
+        private void ButtonLogout_Click(object sender, RoutedEventArgs e)
+        {
+            frame.Navigate(new LoginPage());
+        }
+
         private void ButtonExitApplication_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -44,7 +51,15 @@ namespace FrontDesk
 
         private void ListViewMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var item = sender as ListViewItem;
 
+            frame.Navigate(((ListViewItem)(ListViewMenu.SelectedItem)).Name switch
+            {
+                "ItemRooms" => new RoomPage(),
+                "ItemBookings" => new BookingPage(),
+                "ItemCustomers" => new CustomerPage(),
+                _ => null
+            }); ;
         }
     }
 }

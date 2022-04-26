@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FrontDesk
+namespace FrontDesk.Pages
 {
     /// <summary>
-    /// Interaction logic for UserControlHome.xaml
+    /// Interaction logic for CustomerPage.xaml
     /// </summary>
-    public partial class UserControlHome : UserControl
+    public partial class CustomerPage : Page
     {
-        public UserControlHome()
+        public CustomerPage()
         {
             InitializeComponent();
         }

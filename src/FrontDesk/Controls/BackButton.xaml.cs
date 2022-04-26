@@ -13,16 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FrontDesk
+namespace FrontDesk.Controls
 {
     /// <summary>
-    /// Interaction logic for UserControlCustomers.xaml
+    /// Interaction logic for BackButton.xaml
     /// </summary>
-    public partial class UserControlCustomers : UserControl
+    public partial class BackButton : UserControl
     {
-        public UserControlCustomers()
+        public BackButton()
         {
             InitializeComponent();
+        }
+
+        private void ButtonBack_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

@@ -43,6 +43,18 @@ public class Startup
         services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
 
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000", "https://localhost:3000")
+                        .AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .AllowCredentials();
+                });
+        });
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -88,6 +100,7 @@ public class Startup
         app.UseHealthChecks("/health");
         app.UseHttpsRedirection();
         app.UseStaticFiles();
+        app.UseCors();
 
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DAT154Oblig4 API"));

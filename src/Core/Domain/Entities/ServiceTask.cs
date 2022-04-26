@@ -6,6 +6,8 @@ namespace DAT154Oblig4.Domain.Entities
     public class ServiceTask
     {
         public int Id { get; set; }
+
+        public int RoomId { get; set; }
         public virtual Room Room { get; set; }
         public string Description { get; set; }
         public ServiceTaskType TaskType { get; set; }
@@ -14,9 +16,9 @@ namespace DAT154Oblig4.Domain.Entities
         public string Notes { get; set; }
 
         public ServiceTask() { }
-        public ServiceTask(Room room, ServiceTaskType taskType, string description, ServiceTaskStatus taskStatus, ServiceTaskPriority priority, string notes)
+        public ServiceTask(int roomId, ServiceTaskType taskType, string description, ServiceTaskStatus taskStatus, ServiceTaskPriority priority, string notes)
         {
-            Room = room;
+            RoomId = roomId;
             TaskType = taskType;
             Description = description;
             TaskStatus = taskStatus;

@@ -26,7 +26,7 @@ namespace DAT154Oblig4.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
         {
-            var customer = await Mediator.Send(new GetCustomerByIdQuery());
+            var customer = await Mediator.Send(new GetCustomerByIdQuery() { Id = id });
             if (customer == null) return NotFound();
             return Ok(customer);
         }

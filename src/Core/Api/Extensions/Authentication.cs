@@ -25,7 +25,7 @@ namespace DAT154Oblig4.Api.Extensions
                 new Claim(JwtRegisteredClaimNames.GivenName, user.Name),
                 new Claim(JwtRegisteredClaimNames.Name, user.Username)
             };
-            if (user.Username == "admin") claims = (Claim[])claims.Append(new Claim(type: "Admin", value: "true"));
+            Claim[] adminClaims = new[] { new Claim("Admin", "true") };
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
               _config["Jwt:Audience"],

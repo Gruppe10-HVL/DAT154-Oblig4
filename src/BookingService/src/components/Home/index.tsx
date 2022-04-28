@@ -19,7 +19,7 @@ export const Home = () => {
   const [availableRooms, setAvailableRooms] = useState<Room[]>([])
 
   //* User Choices
-  const [dates, onChangeDates] = useState([new Date(), new Date()])
+  const [dates, onChangeDates] = useState([new Date(), dayjs().add(1, 'week').toDate()])
   const [bedCount, setBedCount] = useState(1)
   const [quality, setQuality] = useState(0)
 
@@ -52,26 +52,30 @@ export const Home = () => {
 
   const handleRoomSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(dates)
-    console.log(bedCount)
-    console.log(quality)
 
-    console.log(rooms)
-    console.log(bookings)
+    if (dayjs(dates[0]).isSame(dates[1], 'day')) {
+      alert("Start and End date of booking can't be on same day")
+      setAvailableRooms([])
+      return
+    }
 
     const filteredRooms = rooms
       .filter(room => room.bedCount === bedCount && room.quality === quality)
       .filter(room => {
-        const relatedBooking = bookings.filter(booking => booking.roomId === room.id)
+        const relatedBooking = bookings.filter(
+          booking => booking.roomId === room.id && booking.status !== 3,
+        )
+
+        if (relatedBooking.length === 0) return room
 
         const fromDate = dates[0]
         const toDate = dates[1]
         return !relatedBooking.some(
           booking =>
-            dayjs(fromDate).isSame(booking.bookingStart) ||
-            dayjs(fromDate).isBetween(booking.bookingStart, booking.bookingEnd) ||
-            dayjs(toDate).isSame(booking.bookingEnd) ||
-            dayjs(toDate).isBetween(booking.bookingStart, booking.bookingEnd),
+            dayjs(booking.bookingStart).isBetween(fromDate, toDate, 'day', '()') ||
+            dayjs(booking.bookingEnd).isBetween(fromDate, toDate, 'day', '()') ||
+            dayjs(fromDate).isBetween(booking.bookingStart, booking.bookingEnd, 'day', '()') ||
+            dayjs(toDate).isBetween(booking.bookingStart, booking.bookingEnd, 'day', '()'),
         )
       })
 
@@ -79,7 +83,6 @@ export const Home = () => {
   }
 
   const handleBooking = async (roomId: number) => {
-    console.log(roomId)
     const form = {
       roomId,
       startDate: dates[0],
@@ -97,6 +100,20 @@ export const Home = () => {
         }
       })
       .catch(err => alert(`An error occured: ${err.message}`))
+  }
+
+  const getRoomQuality = (quality: number): string => {
+    switch (quality) {
+      case 0:
+        return 'Low'
+      case 1:
+        return 'Medium'
+      case 2:
+        return 'High'
+
+      default:
+        return 'Unknown'
+    }
   }
 
   return (
@@ -143,9 +160,9 @@ export const Home = () => {
                     value={quality}
                     onChange={e => setQuality(parseInt(e.target.value))}
                   >
-                    <option value="0">3*</option>
-                    <option value="1">4*</option>
-                    <option value="2">5*</option>
+                    <option value="0">Low</option>
+                    <option value="1">Medium</option>
+                    <option value="2">High</option>
                   </select>
                 </div>
               </div>
@@ -158,9 +175,9 @@ export const Home = () => {
                 return (
                   <div key={room.id} className="card bg-dark w-50">
                     <div className="card-body">
-                      <h5 className="card-title">Room</h5>
+                      <h5 className="card-title">Room {room.id} (fjern)</h5>
                       <h6 className="card-subtitle mb-2 text-muted">
-                        {room.quality + 3} star hotel
+                        {getRoomQuality(room.quality)} Quality
                       </h6>
                       <p>
                         {room.bedCount} bed(s) - {room.size} m²

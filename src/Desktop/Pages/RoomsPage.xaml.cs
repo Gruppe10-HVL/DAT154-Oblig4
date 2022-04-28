@@ -25,25 +25,49 @@ namespace Desktop.Pages
     /// </summary>
     public sealed partial class RoomsPage : Page
     {
+        const string URL = "https://localhost:5001/api/v1/room";
         public List<RoomDto> Rooms = new List<RoomDto>();
 
         public RoomsPage()
         {
             this.InitializeComponent();
+            StartDatePicker.SelectedDate = DateTime.Now;
             GetRooms();
         }
 
-        async void GetRooms()
+        private async void GetRooms()
         {
             HttpClientHandler clientHandler = new HttpClientHandler();
             HttpClient httpClient = new HttpClient(clientHandler);
             httpClient.Timeout = TimeSpan.FromSeconds(30);
 
-            var api = "https://localhost:5001/api/v1/room";
-            var response = await httpClient.GetStringAsync(api);
+            var response = await httpClient.GetStringAsync(URL);
             var rooms = JsonConvert.DeserializeObject<List<RoomDto>>(response);
             Rooms = rooms;
             RoomsMenu.ItemsSource = Rooms;
+        }
+
+        private async void StartDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
+        {
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            HttpClient httpClient = new HttpClient(clientHandler);
+            httpClient.Timeout = TimeSpan.FromSeconds(30);
+
+            var response = await httpClient.GetStringAsync(URL);
+            var rooms = JsonConvert.DeserializeObject<List<RoomDto>>(response);
+            Rooms = rooms;
+            RoomsMenu.ItemsSource = Rooms;
+        }
+
+        private async void EndDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
+        {
+
+        }
+
+        private void RoomsMenu_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            RoomDto room = e.ClickedItem as RoomDto;
+            Frame.Navigate(typeof(BookingPage), room);
         }
     }
 }

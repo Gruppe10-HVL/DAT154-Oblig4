@@ -10,47 +10,52 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <ListView x:Name="RoomsMenu" ItemsSource="{x:Bind Rooms}">
-            <ListView.HeaderTemplate>
-                <DataTemplate>
-                    <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Room" Style="{ThemeResource CaptionTextBlockStyle}"/>
-                        <TextBlock Grid.Column="3" Text="Beds" Style="{ThemeResource CaptionTextBlockStyle}"/>
-                        <TextBlock Grid.Column="5" Text="Size" Style="{ThemeResource CaptionTextBlockStyle}"/>
-                        <TextBlock Grid.Column="7" Text="Quality" Style="{ThemeResource CaptionTextBlockStyle}"/>
-                    </Grid>
-                </DataTemplate>
-            </ListView.HeaderTemplate>
-            <ListView.ItemTemplate>
-                <DataTemplate x:Name="TableDataTemplate" x:DataType="entity:RoomDto">
-                    <Grid Height="48" AutomationProperties.Name="{x:Bind Id}"> 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Text="{x:Bind Id}"/>
-                        <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{x:Bind BedCount}"/>
-                        <TextBlock Grid.Column="5" VerticalAlignment="Center" Text="{x:Bind Size}"/>
-                        <TextBlock Grid.Column="7" VerticalAlignment="Center" Text="{x:Bind Quality}"/>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <StackPanel x:Name="MainStackPanel">
+            <StackPanel x:Name="DatePickerStackPanel" Orientation="Horizontal">
+                <DatePicker x:Name="StartDatePicker" Header="Checkin:" SelectedDateChanged="StartDatePicker_SelectedDateChanged"/>
+                <DatePicker x:Name="EndDatePicker" Header="Checkout:" SelectedDateChanged="EndDatePicker_SelectedDateChanged"/>
+            </StackPanel>
+            <ListView x:Name="RoomsMenu" ItemsSource="{x:Bind Rooms}" 
+                      IsItemClickEnabled="True"
+                      ItemClick="RoomsMenu_ItemClick">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.HeaderTemplate>
+                    <DataTemplate>
+                        <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="250*" />
+                                <ColumnDefinition Width="250*" />
+                                <ColumnDefinition Width="250*" />
+                                <ColumnDefinition Width="250*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Room" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                            <TextBlock Grid.Column="1" Text="Beds" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                            <TextBlock Grid.Column="2" Text="Size" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                            <TextBlock Grid.Column="3" Text="Quality" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.HeaderTemplate>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:Name="TableDataTemplate" x:DataType="entity:RoomDto">
+                        <Grid Height="48" AutomationProperties.Name="{x:Bind Id}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="250*" />
+                                <ColumnDefinition Width="250*" />
+                                <ColumnDefinition Width="250*" />
+                                <ColumnDefinition Width="250*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock VerticalAlignment="Center" Text="{x:Bind Id}"/>
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Bind BedCount}"/>
+                            <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind Size}"/>
+                            <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{x:Bind Quality}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
     </Grid>
 </Page>

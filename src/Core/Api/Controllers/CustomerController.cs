@@ -11,10 +11,10 @@ namespace DAT154Oblig4.Api.Controllers
     public class CustomerController : ApiControllerBase
     {
         /// <summary>
-        /// Gets all customer ids
+        /// Gets all customers
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<int>>> GetAllCustomers(){
+        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers(){
             var customers = await Mediator.Send(new GetAllCustomersQuery());
             if (customers == null) return NotFound();
             return Ok(customers);
@@ -40,7 +40,7 @@ namespace DAT154Oblig4.Api.Controllers
         public async Task<ActionResult<CustomerAuthDto>> CreateCustomer(CreateCustomerCommand request)
         {
             var customer = await Mediator.Send(request);
-            if (customer == null) return NotFound();
+            if (customer == null) return BadRequest();
             return Ok(customer);
         }
 

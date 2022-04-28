@@ -13,7 +13,7 @@ namespace DAT154Oblig4.Api.Controllers
         /// Get all service tasks
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<int>>> GetAllServiceTasks()
+        public async Task<ActionResult<IEnumerable<ServiceTaskDto>>> GetAllServiceTasks()
         {
             var servicetasks = await Mediator.Send(new GetAllServiceTasksQuery());
             if (servicetasks == null) return NotFound();
@@ -33,13 +33,13 @@ namespace DAT154Oblig4.Api.Controllers
         }
 
         /// <summary>
-        /// Create new servicetask
+        /// Create new service task
         /// </summary>
         [HttpPost]
         public async Task<ActionResult<ServiceTaskDto>> CreateServiceTask(CreateServiceTaskCommand request)
         {
             var servicetask = await Mediator.Send(request);
-            if (servicetask == null) return NotFound();
+            if (servicetask == null) return BadRequest();
             return Ok(servicetask);
         }
 

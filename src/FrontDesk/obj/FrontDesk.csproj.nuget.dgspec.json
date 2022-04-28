@@ -1,0 +1,143 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\FrontDesk\\FrontDesk.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\core\\Domain\\Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\core\\Domain\\Domain.csproj",
+        "projectName": "DAT154Oblig4.Domain",
+        "projectPath": "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\core\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\MarkusBjermeland\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\core\\Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\MarkusBjermeland\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://pkgs.dev.azure.com/zdataProducts/DotNet/_packaging/zdataProducts/nuget/v3/index.json": {},
+          "https://www.myget.org/F/crazy-hipster-developer/auth/41142a0a-cdfb-42ed-906f-fe7017eee2e0/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\FrontDesk\\FrontDesk.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\FrontDesk\\FrontDesk.csproj",
+        "projectName": "FrontDesk",
+        "projectPath": "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\FrontDesk\\FrontDesk.csproj",
+        "packagesPath": "C:\\Users\\MarkusBjermeland\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\FrontDesk\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\MarkusBjermeland\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0-windows7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://pkgs.dev.azure.com/zdataProducts/DotNet/_packaging/zdataProducts/nuget/v3/index.json": {},
+          "https://www.myget.org/F/crazy-hipster-developer/auth/41142a0a-cdfb-42ed-906f-fe7017eee2e0/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0-windows7.0": {
+            "targetAlias": "net6.0-windows",
+            "projectReferences": {
+              "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\core\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\core\\Domain\\Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0-windows7.0": {
+          "targetAlias": "net6.0-windows",
+          "dependencies": {
+            "MaterialDesignThemes": {
+              "target": "Package",
+              "version": "[4.4.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WPF": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

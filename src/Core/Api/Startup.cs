@@ -55,6 +55,8 @@ public class Startup
                 };
             });
 
+        services.AddCors(options =>options.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
         services.AddAuthorization(options =>
         {
             options.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
@@ -93,7 +95,7 @@ public class Startup
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DAT154Oblig4 API"));
 
         app.UseRouting();
-
+        app.UseCors();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(e =>

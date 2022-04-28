@@ -26,7 +26,6 @@ export const Login = () => {
             localStorage.setItem(
               'user',
               JSON.stringify({
-                id: res.data.customer.id,
                 name: res.data.customer.name,
                 jwt: res.data.jwt,
               }),

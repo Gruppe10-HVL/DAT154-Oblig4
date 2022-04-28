@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
-import axios from 'axios'
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 dayjs.extend(isBetween)
@@ -9,8 +8,11 @@ dayjs.extend(isBetween)
 import User from 'interfaces/user.interface'
 import Room from 'interfaces/room.interface'
 import Booking from 'interfaces/booking.interface'
+import { api } from 'utils/api'
 
 export const Home = () => {
+  const navigate = useNavigate()
+
   //* External Data
   const [rooms, setRooms] = useState<Room[]>([])
   const [bookings, setBookings] = useState<Booking[]>([])
@@ -30,14 +32,14 @@ export const Home = () => {
       setUser(JSON.parse(storageUser))
 
       const fetchRooms = async () => {
-        await axios
+        await api
           .get('https://localhost:5001/api/v1/room')
           .then(res => setRooms(res.data))
           .catch(err => console.log(err.message))
       }
 
       const fetchBookings = async () => {
-        await axios
+        await api
           .get('https://localhost:5001/api/v1/booking')
           .then(res => setBookings(res.data))
           .catch(err => console.log(err.message))
@@ -64,7 +66,7 @@ export const Home = () => {
 
         const fromDate = dates[0]
         const toDate = dates[1]
-        return relatedBooking.some(
+        return !relatedBooking.some(
           booking =>
             dayjs(fromDate).isSame(booking.bookingStart) ||
             dayjs(fromDate).isBetween(booking.bookingStart, booking.bookingEnd) ||
@@ -77,20 +79,21 @@ export const Home = () => {
   }
 
   const handleBooking = async (roomId: number) => {
+    console.log(roomId)
     const form = {
-      customerId: user?.id,
       roomId,
       startDate: dates[0],
       endDate: dates[1],
     }
 
-    await axios
-      .post('https://localhost:5001/api/v1/booking', form)
+    await api
+      .post('https://localhost:5001/api/v1/booking/customer', form)
       .then(res => {
         if (res.data?.roomId) {
           setAvailableRooms([...availableRooms.filter(room => room.id !== res.data.roomId)])
           setBookings([...bookings, res.data])
           alert('Successfully booked room')
+          navigate('/bookings')
         }
       })
       .catch(err => alert(`An error occured: ${err.message}`))

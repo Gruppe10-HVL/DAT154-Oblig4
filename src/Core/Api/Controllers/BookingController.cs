@@ -87,7 +87,7 @@ namespace DAT154Oblig4.Api.Controllers
             var customerId = CustomerId;
             if (customerId == -1) return BadRequest();
             var booking = await Mediator.Send(new CreateBookingCommand(customerId, roomId, startDate, endDate));
-            if (booking == null) return BadRequest();
+            if (booking == null) return BadRequest("The requested room is already booked for this period");
             return Ok(booking);
         }
 
@@ -99,7 +99,7 @@ namespace DAT154Oblig4.Api.Controllers
         public async Task<ActionResult<BookingDto>> CreateBookingForCustomer(CreateBookingCommand request)
         {
             var booking = await Mediator.Send(request);
-            if (booking == null) return BadRequest();
+            if (booking == null) return BadRequest("The requested room is already booked for this period");
             return Ok(booking);
         }
 

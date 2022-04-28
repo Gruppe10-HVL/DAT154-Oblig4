@@ -11,11 +11,11 @@ namespace DAT154Oblig4.Api.Controllers
     public class RoomController : ApiControllerBase
     {
         /// <summary>
-        /// Gets all room ids
+        /// Gets all rooms
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<int>>> GetAllRoomIds()
+        public async Task<ActionResult<IEnumerable<RoomDto>>> GetAllRoomIds()
         {
             var rooms = await Mediator.Send(new GetAllRoomsQuery());
             if (rooms == null) return NotFound();
@@ -45,7 +45,7 @@ namespace DAT154Oblig4.Api.Controllers
         public async Task<ActionResult<RoomDto>> CreateRoom(int bedCount, int size, RoomQuality quality)
         {
             var room = await Mediator.Send(new CreateNewRoomCommand(bedCount, size, quality));
-            if (room == null) return NotFound();
+            if (room == null) return BadRequest();
             return Ok(room);
         }
 

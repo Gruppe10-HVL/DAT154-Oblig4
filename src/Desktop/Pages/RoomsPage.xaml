@@ -15,7 +15,9 @@
                 <DatePicker x:Name="StartDatePicker" Header="Checkin:" SelectedDateChanged="StartDatePicker_SelectedDateChanged"/>
                 <DatePicker x:Name="EndDatePicker" Header="Checkout:" SelectedDateChanged="EndDatePicker_SelectedDateChanged"/>
             </StackPanel>
-            <ListView x:Name="RoomsMenu" ItemsSource="{x:Bind Rooms}">
+            <ListView x:Name="RoomsMenu" ItemsSource="{x:Bind Rooms}" 
+                      IsItemClickEnabled="True"
+                      ItemClick="RoomsMenu_ItemClick">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

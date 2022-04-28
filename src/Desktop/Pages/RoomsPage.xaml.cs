@@ -63,5 +63,11 @@ namespace Desktop.Pages
         {
 
         }
+
+        private void RoomsMenu_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            RoomDto room = e.ClickedItem as RoomDto;
+            Frame.Navigate(typeof(BookingPage), room);
+        }
     }
 }

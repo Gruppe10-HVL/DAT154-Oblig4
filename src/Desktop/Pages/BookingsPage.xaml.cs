@@ -1,4 +1,5 @@
 ﻿using Desktop.Entities;
+using Desktop.Enums;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,6 @@ namespace Desktop.Pages
     /// </summary>
     public sealed partial class BookingsPage : Page
     {
-
         List<BookingDto> Bookings = new List<BookingDto>();
         List<BookingDto> BookingsQuery = new List<BookingDto>();
         public BookingsPage()
@@ -70,6 +70,75 @@ namespace Desktop.Pages
                 BookingsMenu.ItemsSource = BookingsQuery;
             }
 
+        }
+
+        private async void CheckinButton_Click(object sender, RoutedEventArgs e)
+        {
+            BookingDto booking = (BookingDto)BookingsMenu.SelectedItem;
+
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            HttpClient httpClient = new HttpClient(clientHandler);
+            httpClient.Timeout = TimeSpan.FromSeconds(30);
+
+            var api = "https://localhost:5001/api/v1/booking/checkin";
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), api + "/?id=" + booking.Id);
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                GetBookings();
+        }
+
+        private async void CheckoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            BookingDto booking = (BookingDto)BookingsMenu.SelectedItem;
+
+            if (!booking.Status.Equals(BookingStatus.CheckedIn))
+            {
+                Flyout flyout = new Flyout
+                {
+                    Content = new TextBlock
+                    {
+                        Text = "Booking is not checked in."
+                    }
+                };
+
+                flyout.ShowAt((FrameworkElement)sender);
+
+                return;
+            }
+
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            HttpClient httpClient = new HttpClient(clientHandler);
+            httpClient.Timeout = TimeSpan.FromSeconds(30);
+
+            var api = "https://localhost:5001/api/v1/booking/checkout";
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), api + "/?id=" + booking.Id);
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // TODO: Send ServiceTask
+                ContentDialog createServiceTaskDialog = new ContentDialog
+                {
+                    Title = "Service Task",
+                    Content = "Start cleaning task for this room?",
+                    PrimaryButtonText = "Yes",
+                    CloseButtonText = "No"
+                };
+
+                ContentDialogResult result = await createServiceTaskDialog.ShowAsync();
+
+                if (result == ContentDialogResult.Primary)
+                {
+                    Console.WriteLine("Here");
+                } else
+                {
+
+                }
+
+                GetBookings();
+            }
+                
         }
     }
 }

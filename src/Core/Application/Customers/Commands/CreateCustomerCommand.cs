@@ -31,6 +31,7 @@ namespace DAT154Oblig4.Application.Customers.Commands
 
             public async Task<CustomerAuthDto> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
             {
+                //Never save plaintext passwords :)))
                 var newCustomer = new Customer(request.Name, request.Username, request.Password);
 
                 await _context.Customers.AddAsync(newCustomer, cancellationToken);

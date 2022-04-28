@@ -17,7 +17,7 @@ namespace DAT154Oblig4.Api.Extensions
         }
         public string GenerateJWT(CustomerDto user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Secret"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             Claim[] claims = new[] {
@@ -30,7 +30,7 @@ namespace DAT154Oblig4.Api.Extensions
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
               _config["Jwt:Audience"],
               claims,
-              expires: DateTime.Now.AddMinutes(120),
+              expires: DateTime.Now.AddMinutes(360),
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

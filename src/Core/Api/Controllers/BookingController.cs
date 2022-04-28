@@ -4,6 +4,7 @@ using DAT154Oblig4.Application.Dto;
 using DAT154Oblig4.Application.ServiceTasks.Commands;
 using DAT154Oblig4.Domain.Enums;
 using DAT154Oblig4.Domain.Enums.Booking;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -21,19 +22,19 @@ namespace DAT154Oblig4.Api.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        //Borked, fix later
-        public Claim ? CustomerIdString => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name);
-        public int CustomerId => CustomerIdString != null ? Int32.Parse(CustomerIdString.Value) : -1;
+        public string CustomerIdString => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier).Value;
+        public int CustomerId => CustomerIdString != null ? Int32.Parse(CustomerIdString) : (-1);
             
         /// <summary>
         /// Allow customer to get own bookings
         /// </summary>
         /// <remarks>Customer endpoint</remarks>
         [HttpGet("customer")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<BookingDto>>> GetAllOwnBookings()
         {
             var customerId = CustomerId;
-            if(customerId == -1) return BadRequest();
+            if (customerId == -1) return BadRequest();
             var bookings = await Mediator.Send(new GetBookingsByCustomerId() { CustomerId = customerId });
             if (bookings == null) return NotFound();
             return Ok(bookings);
@@ -80,6 +81,7 @@ namespace DAT154Oblig4.Api.Controllers
         /// </summary>
         /// <remarks>Customer endpoint</remarks>
         [HttpPost("customer")]
+        [Authorize]
         public async Task<ActionResult<BookingDto>> CreateOwnBooking(int roomId, DateTime startDate, DateTime endDate)
         {
             var customerId = CustomerId;
@@ -133,6 +135,7 @@ namespace DAT154Oblig4.Api.Controllers
         /// </summary>
         /// <remarks>Customer endpoint</remarks>
         [HttpPatch("customer/cancel")]
+        [Authorize]
         public async Task<ActionResult<BookingDto>> CancelOwnBooking(int id)
         {
             var customerId = CustomerId;

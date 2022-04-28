@@ -1,0 +1,32 @@
+@using DAT154Oblig4.Domain.Entities
+@using DAT154Oblig4.Domain.Enums
+@using DAT154Oblig4.Application.Dto
+@inject HttpClient API
+
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    
+    public List<ServiceTaskDto>? Tasks { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+
+        // Tasks = new List<ServiceTask>
+        // {
+        //     new ServiceTask(100, ServiceTaskType.Cleaning, "Difficult cleaning task", ServiceTaskStatus.New, ServiceTaskPriority.MEDIUM, ""),
+        //     new ServiceTask(200, ServiceTaskType.Cleaning, "Difficult cleaning task", ServiceTaskStatus.New, ServiceTaskPriority.MEDIUM, ""),
+        //     new ServiceTask(300, ServiceTaskType.Cleaning, "Difficult cleaning task", ServiceTaskStatus.New, ServiceTaskPriority.MEDIUM, ""),
+        // };
+        
+        Tasks = await API.GetFromJsonAsync<List<ServiceTaskDto>>("https://localhost:5001/api/v1/task");
+        
+    }
+
+}

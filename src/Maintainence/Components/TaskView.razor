@@ -1,0 +1,110 @@
+@page "/task/{TaskId}"
+@using DAT154Oblig4.Domain.Entities
+@using DAT154Oblig4.Domain.Enums
+@using Microsoft.AspNetCore.Components
+@using DAT154Oblig4.Application.Dto
+@inject NavigationManager _navigationManager
+
+<h3>Task@(Task != null ? " (Id: " + Task.Id + ")" : ""):</h3>
+
+@if (NotFound)
+{
+    <p>Task not found!</p>
+}
+else
+{
+    @if (Task != null)
+    {
+        
+        <EditForm Model="Task" class="bg-light p-3 rounded" OnSubmit="OnSubmit">
+            <div class="form-group mb-3">
+                <label for="Description">Description:</label>
+                <h5 id="Description">@Task.Description</h5>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Type:</label>
+                <h5>@Task.TaskType</h5>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label for="progress">Status</label>
+                <div class="d-flex">
+                    <button type="button" @onclick="() => Task.TaskStatus = ServiceTaskStatus.New" class="btn m-2 @(Task.TaskStatus == ServiceTaskStatus.New ? "btn-success" : "btn-secondary")">
+                        New
+                    </button>
+                    <button type="button" @onclick="() => Task.TaskStatus = ServiceTaskStatus.Started" class="btn m-2 @(Task.TaskStatus == ServiceTaskStatus.Started ? "btn-success" : "btn-secondary")">
+                        In progress
+                    </button>
+                    <button type="button" @onclick="() => Task.TaskStatus = ServiceTaskStatus.Finished" class="btn m-2 @(Task.TaskStatus == ServiceTaskStatus.Finished ? "btn-success" : "btn-secondary")">
+                        Finished
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="notes">Notes:</label>
+                <InputTextArea @bind-Value="Task.Notes" class="form-control" id="notes" rows="3"></InputTextArea>
+            </div>
+
+            <button class="btn btn-primary m-1" type="submit">Update task</button>
+            <button class="btn btn-secondary m-1" type="button" @onclick="NavigateBack">Cancel</button>
+        </EditForm>
+
+    }
+    else
+    {
+        <p>Loading...</p>
+    }
+}
+
+@code {
+    
+    [Parameter]
+    public string TaskId { get; set; }
+    
+    [CascadingParameter]
+    public AppState State { get; set; }
+    
+    public ServiceTaskDto? Task { get; set; }
+
+    private bool NotFound { get; set; } = false;
+
+    private void OnSubmit()
+    {
+        // Call API...
+        var updatedTasks = State.Tasks.Select(t => t.Id != Task.Id ? t : Task).ToList();
+        
+        State.Tasks = updatedTasks;
+
+        NavigateBack();
+    }
+
+    private void NavigateBack()
+    {
+        string nav = Task.TaskType switch
+        {
+            ServiceTaskType.Cleaning => "tasks/cleaning",
+            ServiceTaskType.Maintainence => "tasks/maintenance",
+            ServiceTaskType.Service => "tasks/service",
+            _ => "/"
+            };
+
+        _navigationManager.NavigateTo(nav);
+    }
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            // Get from API
+            Task = State.Tasks.Find(t => t.Id== int.Parse(TaskId));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.StackTrace);
+            NotFound = true;
+        }
+    }
+
+}

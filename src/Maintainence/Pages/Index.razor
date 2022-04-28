@@ -1,9 +1,16 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<h3>Select task</h3>
 
-<h1>Hello, world!</h1>
+<div class="d-flex justify-content-left">
+    <a class="btn btn-primary m-3" href="/tasks/maintenance">Maintenance</a>
+    <a class="btn btn-primary m-3" href="/tasks/cleaning">Cleaning</a>
+    <a class="btn btn-primary m-3" href="/tasks/service">Room service</a>
+</div>
 
-Welcome to your new app.
+@code {
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    [CascadingParameter]
+    public AppState? State { get; set; }
+
+}

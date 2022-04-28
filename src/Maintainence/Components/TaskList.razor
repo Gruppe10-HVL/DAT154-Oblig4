@@ -1,0 +1,50 @@
+@using DAT154Oblig4.Domain.Enums
+
+<div class="d-flex">
+    <input type="checkbox" checked="@ShowFinished" @onchange="() => ShowFinished = !ShowFinished" class="btn-check" id="finished-check" autocomplete="off">
+    <label class="btn btn-outline-primary" for="finished-check">
+        @(ShowFinished ? "Hide" : "Show") finished tasks
+    </label>
+</div>
+
+@if (State is {Tasks: { } })
+{
+    <table class="table">
+        
+        <thead>
+        <tr>
+            <th>Room</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th></th>
+        </tr>
+        </thead>
+        
+        <tbody>
+            @foreach (var t in State.Tasks.Where(t => t.TaskType == TaskType && (ShowFinished || t.TaskStatus != ServiceTaskStatus.Finished)).ToList())
+            {
+                <tr>
+                    <td>@t.RoomId</td>
+                    <td>@t.Description</td>
+                    <td>@(t.TaskStatus == ServiceTaskStatus.Started ? "In progress" : t.TaskStatus)</td>
+                    <td>@t.Priority.ToString()[0]@t.Priority.ToString()[1..].ToLower()</td>
+                    <td><a href="/task/@t.Id" class="btn btn-link">Show task</a></td>
+                </tr>
+            }
+        </tbody>
+        
+    </table>
+}
+
+@code {
+    
+    [CascadingParameter]
+    public AppState State { get; set; }
+    
+    [Parameter]
+    public ServiceTaskType TaskType { get; set; }
+    
+    private bool ShowFinished { get; set; }
+    
+}

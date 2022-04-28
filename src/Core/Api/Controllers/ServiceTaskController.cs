@@ -49,13 +49,11 @@ namespace DAT154Oblig4.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPatch]
-        public async Task<ActionResult<ServiceTaskDto>> UpdateServiceTaskStatus(UpdateServiceTaskStatusCommand request)
+        public async Task<ActionResult<ServiceTaskDto>> UpdateServiceTask(UpdateServiceTaskCommand request)
         {
             var servicetask = await Mediator.Send(request);
             if (servicetask == null) return NotFound();
             return Ok(servicetask);
         }
-
-        //Change priority?
     }
 }

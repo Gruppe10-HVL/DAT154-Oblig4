@@ -37,10 +37,15 @@ namespace DAT154Oblig4.Application.Bookings.Commands
 
         public async Task<BookingDto> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
         {
-            var booking = new Booking(request.CustomerId, request.RoomId, request.StartDate, request.EndDate);
-            await _context.Bookings.AddAsync(booking, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            //Check if there are any active bookings for period
+            var existingBookings = _context.Bookings.Any(x => x.BookingStart < request.EndDate && x.BookingEnd > request.StartDate);
+            //Return null if there are existing bookings in requested range.
+            //Could be implemented more cleanly if all Handle-methods were wrapped by a ServiceResult class.
+            if(existingBookings) return null;
 
+            var booking = new Booking(request.CustomerId, request.RoomId, request.StartDate, request.EndDate);
+            _context.Bookings.Attach(booking);
+            await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<BookingDto>(booking);
         }
     }

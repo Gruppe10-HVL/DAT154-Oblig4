@@ -82,11 +82,12 @@ namespace DAT154Oblig4.Api.Controllers
         /// <remarks>Customer endpoint</remarks>
         [HttpPost("customer")]
         [Authorize]
-        public async Task<ActionResult<BookingDto>> CreateOwnBooking(int roomId, DateTime startDate, DateTime endDate)
+        public async Task<ActionResult<BookingDto>> CreateOwnBooking(CreateBookingCommand request)
         {
             var customerId = CustomerId;
             if (customerId == -1) return BadRequest();
-            var booking = await Mediator.Send(new CreateBookingCommand(customerId, roomId, startDate, endDate));
+            request.CustomerId = customerId;
+            var booking = await Mediator.Send(request);
             if (booking == null) return BadRequest();
             return Ok(booking);
         }

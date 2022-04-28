@@ -2,12 +2,12 @@
 
 <div class="d-flex">
     <input type="checkbox" checked="@ShowFinished" @onchange="() => ShowFinished = !ShowFinished" class="btn-check" id="finished-check" autocomplete="off">
-    <label class="btn btn-outline-primary" for="finished-check">
+    <label class="btn btn-outline-primary m-3" for="finished-check">
         @(ShowFinished ? "Hide" : "Show") finished tasks
     </label>
 </div>
 
-@if (State is {Tasks: { } })
+@if (State is {ServiceTasks: { } })
 {
     <table class="table">
         
@@ -22,7 +22,7 @@
         </thead>
         
         <tbody>
-            @foreach (var t in State.Tasks.Where(t => t.TaskType == TaskType && (ShowFinished || t.TaskStatus != ServiceTaskStatus.Finished)).ToList())
+            @foreach (var t in State.ServiceTasks.Where(t => t.TaskType == TaskType && (ShowFinished || t.TaskStatus != ServiceTaskStatus.Finished)).ToList())
             {
                 <tr>
                     <td>@t.RoomId</td>

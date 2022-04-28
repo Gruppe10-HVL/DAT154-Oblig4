@@ -1,6 +1,8 @@
 ﻿using DAT154Oblig4.Application.Bookings.Commands;
 using DAT154Oblig4.Application.Bookings.Queries;
 using DAT154Oblig4.Application.Dto;
+using DAT154Oblig4.Application.ServiceTasks.Commands;
+using DAT154Oblig4.Domain.Enums;
 using DAT154Oblig4.Domain.Enums.Booking;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -111,6 +113,8 @@ namespace DAT154Oblig4.Api.Controllers
         {
             var booking = await Mediator.Send(new ChangeBookingStatusCommand() { Id = id, Status = BookingStatus.CheckedOut });
             if (booking == null) return NotFound();
+            var newServiceTask = await Mediator.Send(new CreateServiceTaskCommand(booking.RoomId, "Cleanup on checkout",ServiceTaskType.Cleaning,ServiceTaskStatus.New,ServiceTaskPriority.MEDIUM,"None"));
+            if (newServiceTask == null) Console.WriteLine("Automatic Cleanup Task Failed");
             return Ok(booking);
         }
 

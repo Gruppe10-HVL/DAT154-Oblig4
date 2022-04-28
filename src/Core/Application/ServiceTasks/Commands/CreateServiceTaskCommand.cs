@@ -16,6 +16,18 @@ namespace DAT154Oblig4.Application.ServiceTasks.Commands
         public ServiceTaskStatus TaskStatus { get; set; }
         public ServiceTaskPriority Priority { get; set; }
         public string Notes { get; set; }
+
+        public CreateServiceTaskCommand() { }
+
+        public CreateServiceTaskCommand(int roomId, string description, ServiceTaskType taskType, ServiceTaskStatus taskStatus, ServiceTaskPriority priority, string notes)
+        {
+            RoomId = roomId;
+            Description = description;
+            TaskType = taskType;
+            TaskStatus = taskStatus;
+            Priority = priority;
+            Notes = notes;
+        }
     }
 
     public class CreateServiceTaskCommandHandler : IRequestHandler<CreateServiceTaskCommand, ServiceTaskDto>

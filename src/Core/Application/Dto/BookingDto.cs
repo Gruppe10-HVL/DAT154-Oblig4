@@ -5,13 +5,13 @@ using System.Text.Json.Serialization;
 
 namespace DAT154Oblig4.Application.Dto
 {
-    public class BookingDto : IRegister
+    public class BookingDto
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [JsonPropertyName("customerName")]
-        public string CustomerName { get; set; }
+        [JsonPropertyName("customer")]
+        public CustomerDto Customer { get; set; }
 
         [JsonPropertyName("roomId")]
         public int RoomId { get; set; }
@@ -25,10 +25,5 @@ namespace DAT154Oblig4.Application.Dto
         [JsonPropertyName("bookingEnd")]
         public DateTime BookingEnd { get; set; }
 
-        public void Register(TypeAdapterConfig config)
-        {
-            config.NewConfig<Booking, BookingDto>()
-                .Map(x => x.CustomerName, x => x.Customer.Name);
-        }
     }
 }

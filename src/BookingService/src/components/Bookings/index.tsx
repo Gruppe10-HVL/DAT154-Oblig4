@@ -96,6 +96,7 @@ export const Bookings = () => {
     <div className="container mt-5">
       <div className="text-center">
         <h1 className="h3 mb-4">My Bookings</h1>
+        {bookings.length === 0 && <p>You have no bookings.</p>}
         {bookings
           .sort((a, b) => a.status - b.status)
           .map(booking => {

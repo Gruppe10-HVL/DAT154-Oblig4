@@ -2,7 +2,7 @@
 
 namespace Desktop.Entities
 {
-    public class ServiceTaskDto
+    public class ServiceTaskEntity
     {
         public int Id { get; set; }
         public int RoomId { get; set; }

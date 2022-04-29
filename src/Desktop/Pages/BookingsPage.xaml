@@ -9,14 +9,38 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <local:NullItemToVisibility x:Key="NullItemToVisibility"/>
+    </Page.Resources>
     <Grid>
-        <StackPanel>
-            <SearchBox x:Name="SearchCustomerButton" 
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!-- Topbar -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200*"/>
+                    <ColumnDefinition Width="300*"/>
+                </Grid.ColumnDefinitions>
+                <SearchBox x:Name="SearchCustomerButton" 
                        PlaceholderText="Search for customer"
                        QueryChanged="SearchCustomerButton_QueryChanged"
                        QuerySubmitted="SearchCustomerButton_QuerySubmitted"
                        Height="35"/>
-            <ListView x:Name="BookingsMenu" ItemsSource="{x:Bind Bookings}">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Margin="10" x:Name="CheckinButton" Content="Checkin" HorizontalAlignment="Right"
+                    Click="CheckinButton_Click"/>
+                    <Button Margin="10" x:Name="CheckoutButton" Content="Checkout" HorizontalAlignment="Right"
+                    Click="CheckoutButton_Click"/>
+                </StackPanel>
+            </Grid>
+            <!-- List Content -->
+            <ListView Grid.Row="1" x:Name="BookingsMenu" ItemsSource="{x:Bind Bookings}" 
+                      ScrollViewer.VerticalScrollMode="Enabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -43,7 +67,7 @@
                     </DataTemplate>
                 </ListView.HeaderTemplate>
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="entity:BookingDto">
+                    <DataTemplate x:DataType="entity:BookingEntity">
                         <Grid Height="48" AutomationProperties.Name="{x:Bind Id}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="250*" />
@@ -54,7 +78,7 @@
                                 <ColumnDefinition Width="250*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center" Text="{x:Bind Id}"/>
-                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Bind CustomerName}"/>
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Bind Customer.Name}"/>
                             <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind RoomId}"/>
                             <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{x:Bind Status}"/>
                             <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="{x:Bind BookingStart}"/>
@@ -63,12 +87,71 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Button Margin="10" x:Name="CheckinButton" Content="Checkin"
-                    Click="CheckinButton_Click"/>
-            <Button Margin="10" x:Name="CheckoutButton" Content="Checkout"
-                    Click="CheckoutButton_Click"/>
-        </StackPanel>
+            <!-- Footer -->
+            <Grid Grid.Row="2" VerticalAlignment="Bottom" Height="80">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200*"/>
+                    <ColumnDefinition Width="300*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel VerticalAlignment="Bottom" Margin="10" Orientation="Horizontal">
+                        <ComboBox x:Name="CustomerCombo"  VerticalAlignment="Bottom"
+                          PlaceholderText="Customers" ItemsSource="{x:Bind CustomerNames}"
+                          SelectionChanged="CustomerCombo_SelectionChanged"/>
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding SelectedItem, ElementName=CustomerCombo, Converter={StaticResource NullItemToVisibility}}">
+                            <Button x:Name="CustomerComboClearButton" Click="CustomerComboClearButton_Click">
+                                <SymbolIcon Symbol="Cancel"/>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel VerticalAlignment="Bottom" Margin="10" Orientation="Horizontal">
+                        <ComboBox x:Name="RoomCombo"  VerticalAlignment="Bottom"
+                          PlaceholderText="Rooms" ItemsSource="{x:Bind RoomIds}"
+                          SelectionChanged="RoomCombo_SelectionChanged" />
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding SelectedItem, ElementName=RoomCombo, Converter={StaticResource NullItemToVisibility}}">
+                            <Button x:Name="RoomComboClearButton" Click="RoomComboClearButton_Click">
+                                <SymbolIcon Symbol="Cancel"/>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel VerticalAlignment="Bottom" Margin="10" Orientation="Horizontal">
+                        <ComboBox x:Name="BookingsStatusCombo" VerticalAlignment="Bottom" 
+                          PlaceholderText="Booking status" ItemsSource="{x:Bind Statuses}"
+                          SelectionChanged="BookingsStatusCombo_SelectionChanged" />
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding SelectedItem, ElementName=BookingsStatusCombo, Converter={StaticResource NullItemToVisibility}}">
+                            <Button x:Name="BookingsStatusComboClearButton" Click="BookingsStatusComboClearButton_Click">
+                                <SymbolIcon Symbol="Cancel"/>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                    <Button x:Name="CreateBookingButton" Margin="10" HorizontalAlignment="Right"
+                        Click="CreateBookingButton_Click">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <SymbolIcon Symbol="Add" VerticalAlignment="Center"/>
+                            <TextBlock Text="Create new booking" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="CancelBookingButton" Margin="10" HorizontalAlignment="Right"
+                        Click="CancelBookingButton_Click">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <SymbolIcon Symbol="Cancel" VerticalAlignment="Center"/>
+                            <TextBlock Text="Cancel booking" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="DeleteBookingButton" Margin="10" HorizontalAlignment="Right"
+                        Click="DeleteBookingButton_Click">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <SymbolIcon Symbol="Remove" VerticalAlignment="Center"/>
+                            <TextBlock Text="Delete booking" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>

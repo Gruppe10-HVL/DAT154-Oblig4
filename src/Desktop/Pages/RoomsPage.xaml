@@ -40,7 +40,7 @@
                     </DataTemplate>
                 </ListView.HeaderTemplate>
                 <ListView.ItemTemplate>
-                    <DataTemplate x:Name="TableDataTemplate" x:DataType="entity:RoomDto">
+                    <DataTemplate x:Name="TableDataTemplate" x:DataType="entity:RoomEntity">
                         <Grid Height="48" AutomationProperties.Name="{x:Bind Id}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="250*" />

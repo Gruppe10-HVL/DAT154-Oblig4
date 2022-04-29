@@ -3,12 +3,143 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Desktop.Pages"
+    xmlns:entity="using:Desktop.Entities"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!-- Topbar -->
+            <Grid>
+                <TextBlock Text="Booking" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            
+            <!-- Form Content -->
+            <Grid Grid.Row="1" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                
+                <!-- Customer Input -->
+                <StackPanel x:Name="Customer" Margin="20">
+                    <TextBlock Text="Customer:"/>
+                    <ComboBox x:Name="CustomerCombo" MinWidth="300" ItemsSource="{x:Bind Customers}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                
+                <!-- Room Input -->
+                <StackPanel Grid.Row="1" x:Name="Room" Margin="20">
+                    <TextBlock Text="Room:" />
+                    <ComboBox x:Name="RoomCombo" MinWidth="300" ItemsSource="{x:Bind RoomIds}"/>
+                </StackPanel>
+                
+                <!-- Date Pickers -->
+                <StackPanel Grid.Row="2" x:Name="Dates" Margin="20">
+                    <CalendarDatePicker x:Name="BookingStartDatePicker" Width="300"
+                                        PlaceholderText="Choose booking start date: " Header="Start: "
+                                        DateChanged="StartDatePicker_DateChanged"/>
+                    <CalendarDatePicker x:Name="BookingEndDatePicker" Width="300"
+                                        PlaceholderText="Choose booking end date: " Header="End: "
+                                        DateChanged="EndDatePicker_DateChanged"/>
+                </StackPanel>
 
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Customers Menu -->
+                    <TextBlock Text="Customers" Margin="20" />
+                    <ListView Grid.Row="1" x:Name="CustomersMenu" Margin="20" ItemsSource="{x:Bind Customers}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="IsHitTestVisible" Value="false"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100*"/>
+                                        <ColumnDefinition Width="100*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Customer" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                    <TextBlock Grid.Column="1" Text="Id" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.HeaderTemplate>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="entity:CustomerEntity">
+                                <Grid Height="48" AutomationProperties.Name="{x:Bind Name}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="250*"/>
+                                        <ColumnDefinition Width="250*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{x:Bind Name}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{x:Bind Id}" VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    
+                    <!-- Available Rooms Menu -->
+                    <TextBlock Grid.Column="1" Text="Available Rooms" Margin="20" />
+                    <ListView Grid.Column="1" Grid.Row="1" x:Name="AvailableRoomsMenu" Margin="20" ItemsSource="{x:Bind RoomIds}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="IsHitTestVisible" Value="false"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
+                                    <TextBlock Text="Room" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.HeaderTemplate>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="entity:RoomEntity">
+                                <Grid Height="48">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding }" VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
+            
+            <!-- Footer -->
+            <Grid Grid.Row="2">
+                <Grid Height="80">
+                    <Button x:Name="CreateBookingButton" Content="Create Booking" Margin="20" HorizontalAlignment="Stretch" 
+                            Click="CreateBookingButton_Click"/>
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>

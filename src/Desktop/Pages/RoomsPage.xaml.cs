@@ -26,7 +26,7 @@ namespace Desktop.Pages
     public sealed partial class RoomsPage : Page
     {
         const string URL = "https://localhost:5001/api/v1/room";
-        public List<RoomDto> Rooms = new List<RoomDto>();
+        public List<RoomEntity> Rooms = new List<RoomEntity>();
 
         public RoomsPage()
         {
@@ -42,7 +42,7 @@ namespace Desktop.Pages
             httpClient.Timeout = TimeSpan.FromSeconds(30);
 
             var response = await httpClient.GetStringAsync(URL);
-            var rooms = JsonConvert.DeserializeObject<List<RoomDto>>(response);
+            var rooms = JsonConvert.DeserializeObject<List<RoomEntity>>(response);
             Rooms = rooms;
             RoomsMenu.ItemsSource = Rooms;
         }
@@ -54,19 +54,26 @@ namespace Desktop.Pages
             httpClient.Timeout = TimeSpan.FromSeconds(30);
 
             var response = await httpClient.GetStringAsync(URL);
-            var rooms = JsonConvert.DeserializeObject<List<RoomDto>>(response);
+            var rooms = JsonConvert.DeserializeObject<List<RoomEntity>>(response);
             Rooms = rooms;
             RoomsMenu.ItemsSource = Rooms;
         }
 
         private async void EndDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
         {
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            HttpClient httpClient = new HttpClient(clientHandler);
+            httpClient.Timeout = TimeSpan.FromSeconds(30);
 
+            var response = await httpClient.GetStringAsync(URL);
+            var rooms = JsonConvert.DeserializeObject<List<RoomEntity>>(response);
+            Rooms = rooms;
+            RoomsMenu.ItemsSource = Rooms;
         }
 
         private void RoomsMenu_ItemClick(object sender, ItemClickEventArgs e)
         {
-            RoomDto room = e.ClickedItem as RoomDto;
+            RoomEntity room = e.ClickedItem as RoomEntity;
             Frame.Navigate(typeof(BookingPage), room);
         }
     }

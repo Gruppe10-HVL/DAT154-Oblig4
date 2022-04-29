@@ -1,5 +1,6 @@
 ﻿using DAT154Oblig4.Application.Common.Interfaces;
 using DAT154Oblig4.Application.Dto;
+using DAT154Oblig4.Domain.Enums.Booking;
 using Mapster;
 using MapsterMapper;
 using MediatR;
@@ -33,7 +34,7 @@ namespace DAT154Oblig4.Application.Rooms.Queries
         public async Task<IEnumerable<RoomDto>> Handle(GetAllRoomsAvailabilityQuery request, CancellationToken cancellationToken)
         {
             List<RoomDto> availableRoomsId = await _context.Rooms.Where(room => 
-            !room.Bookings.Any(x => 
+            !room.Bookings.Where(x => x.Status != BookingStatus.Cancelled).Any(x => 
                 (x.BookingStart <= request.StartDate && x.BookingEnd >= request.StartDate) ||
                 (x.BookingStart <= request.EndDate && x.BookingEnd >= request.EndDate)     ||
                 (request.StartDate <= x.BookingStart && request.EndDate >= x.BookingStart) ||

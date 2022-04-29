@@ -1,6 +1,7 @@
 ﻿using DAT154Oblig4.Application.Common.Interfaces;
 using DAT154Oblig4.Application.Dto;
 using DAT154Oblig4.Domain.Entities;
+using DAT154Oblig4.Domain.Enums.Booking;
 using MapsterMapper;
 using MediatR;
 
@@ -38,7 +39,7 @@ namespace DAT154Oblig4.Application.Bookings.Commands
         public async Task<BookingDto> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
         {
             //Check if there are any active bookings for period
-            var existingBookings = _context.Bookings.Any(x => x.RoomId == request.RoomId && (
+            var existingBookings = _context.Bookings.Where(x => x.Status != BookingStatus.Cancelled).Any(x => x.RoomId == request.RoomId && (
                 (x.BookingStart <= request.StartDate && x.BookingEnd >= request.StartDate) ||
                 (x.BookingStart <= request.EndDate && x.BookingEnd >= request.EndDate) ||
                 (request.StartDate <= x.BookingStart && request.EndDate >= x.BookingStart) ||

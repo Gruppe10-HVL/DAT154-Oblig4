@@ -72,28 +72,6 @@ export const Home = () => {
         setAvailableRooms(filteredRooms)
       })
       .catch(err => console.log(err.message))
-
-    // const filteredRooms = rooms
-    //   .filter(room => room.bedCount === bedCount && room.quality === quality)
-    //   .filter(room => {
-    //     const relatedBooking = bookings.filter(
-    //       booking => booking.roomId === room.id && booking.status !== 3,
-    //     )
-
-    //     if (relatedBooking.length === 0) return room
-
-    //     const fromDate = dates[0]
-    //     const toDate = dates[1]
-    //     return !relatedBooking.some(
-    //       booking =>
-    //         dayjs(booking.bookingStart).isBetween(fromDate, toDate, 'day', '()') ||
-    //         dayjs(booking.bookingEnd).isBetween(fromDate, toDate, 'day', '()') ||
-    //         dayjs(fromDate).isBetween(booking.bookingStart, booking.bookingEnd, 'day', '()') ||
-    //         dayjs(toDate).isBetween(booking.bookingStart, booking.bookingEnd, 'day', '()'),
-    //     )
-    //   })
-
-    // setAvailableRooms(filteredRooms)
   }
 
   const handleBooking = async (roomId: number) => {

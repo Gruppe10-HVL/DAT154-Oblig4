@@ -35,6 +35,30 @@ namespace DAT154Oblig4.Api.Controllers
         }
 
         /// <summary>
+        /// Gets all rooms available in date range
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("available")]
+        public async Task<ActionResult<IEnumerable<RoomDto>>> GetAllRoomIds( DateTime from, DateTime to)
+        {
+            var rooms = await Mediator.Send(new GetAllRoomsAvailabilityQuery(from, to));
+            if (rooms == null) return NotFound();
+            return Ok(rooms);
+        }
+
+        /// <summary>
+        /// Get room by id available in date range
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("available/{id}")]
+        public async Task<ActionResult<RoomDto>> GetAllRoomIds([FromRoute] int id, DateTime from, DateTime to)
+        {
+            var rooms = await Mediator.Send(new GetRoomAvailabilityByIdQuery(id, from, to));
+            if (rooms == null) return NotFound();
+            return Ok(rooms);
+        }
+
+        /// <summary>
         /// Creates a new room
         /// </summary>
         /// <param name="bedCount"></param>

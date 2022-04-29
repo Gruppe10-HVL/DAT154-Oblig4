@@ -140,7 +140,7 @@ namespace DAT154Oblig4.Api.Controllers
         {
             var customerId = CustomerId;
             if (customerId == -1) return BadRequest();
-            var booking = await Mediator.Send(new ChangeBookingStatusCommand() { Id = id, Status = BookingStatus.CheckedOut });
+            var booking = await Mediator.Send(new ChangeBookingStatusCommand() { Id = id, Status = BookingStatus.Cancelled });
             if (booking == null) return NotFound();
             return Ok(booking);
         }
@@ -152,7 +152,7 @@ namespace DAT154Oblig4.Api.Controllers
         [HttpPatch("cancel")]
         public async Task<ActionResult<BookingDto>> CancelBooking(int id)
         {
-            var booking = await Mediator.Send(new ChangeBookingStatusCommand() { Id = id, Status = BookingStatus.CheckedOut });
+            var booking = await Mediator.Send(new ChangeBookingStatusCommand() { Id = id, Status = BookingStatus.Cancelled });
             if (booking == null) return NotFound();
             return Ok(booking);
         }

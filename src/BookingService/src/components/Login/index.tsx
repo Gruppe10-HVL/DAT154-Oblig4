@@ -52,7 +52,7 @@ export const Login = () => {
         <div className="form-floating">
           <input
             type="text"
-            className="form-control"
+            className="form-control bg-dark border-dark text-white"
             id="floatingUsername"
             onChange={e => setUsername(e.target.value)}
           />
@@ -61,7 +61,7 @@ export const Login = () => {
         <div className="form-floating">
           <input
             type="password"
-            className="form-control"
+            className="form-control bg-dark border-dark text-white"
             id="floatingPassword"
             onChange={e => setPassword(e.target.value)}
           />

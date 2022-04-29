@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "iDNMAp3a7qjZ0otd+IMmyrkSyaA5T5gHOLMEqlQ/R4LyaT9lSY+W0XqLVwsaOxpg6ip5vZxbBClSbydbnJC2FA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\MarkusBjermeland\\source\\repos\\DAT154-Oblig4\\src\\FrontDesk\\FrontDesk.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\MarkusBjermeland\\.nuget\\packages\\materialdesigncolors\\2.0.5\\materialdesigncolors.2.0.5.nupkg.sha512",
+    "C:\\Users\\MarkusBjermeland\\.nuget\\packages\\materialdesignthemes\\4.4.0\\materialdesignthemes.4.4.0.nupkg.sha512",
+    "C:\\Users\\MarkusBjermeland\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

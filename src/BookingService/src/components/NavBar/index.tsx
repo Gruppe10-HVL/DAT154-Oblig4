@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { User } from 'interfaces/user.interface'
+import User from 'interfaces/user.interface'
+import { NavLink } from 'react-router-dom'
 
 export const NavBar = () => {
   const [user, setUser] = useState<User>()
@@ -19,8 +20,10 @@ export const NavBar = () => {
     return () => window.removeEventListener('storage', getUser)
   }, [])
 
+  const handleLogout = () => localStorage.removeItem('user')
+
   return (
-    <nav className="navbar navbar-expand-md navbar-light bg-light">
+    <nav className="navbar navbar-expand-md navbar-dark bg-dark">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
           Booking Service
@@ -39,14 +42,17 @@ export const NavBar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <NavLink to="/" className={isActive => 'nav-link' + (isActive ? ' active' : '')}>
                 Home
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
-                Link
-              </a>
+              <NavLink
+                to="/bookings"
+                className={isActive => 'nav-link' + (isActive ? ' active' : '')}
+              >
+                My bookings
+              </NavLink>
             </li>
           </ul>
           <form className="d-flex">
@@ -55,7 +61,12 @@ export const NavBar = () => {
                 Login
               </Link>
             ) : (
-              <p className="mt-3">Logged in as {user.name}</p>
+              <>
+                <p className="mt-3">Logged in as {user.name}</p>
+                <button className="btn btn-link" onClick={handleLogout}>
+                  Log out
+                </button>
+              </>
             )}
           </form>
         </div>

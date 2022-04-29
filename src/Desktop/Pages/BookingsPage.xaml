@@ -78,7 +78,7 @@
                                 <ColumnDefinition Width="250*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center" Text="{x:Bind Id}"/>
-                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Bind CustomerName}"/>
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Bind Customer.Name}"/>
                             <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind RoomId}"/>
                             <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{x:Bind Status}"/>
                             <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="{x:Bind BookingStart}"/>
@@ -96,7 +96,7 @@
                 <StackPanel Orientation="Horizontal">
                     <StackPanel VerticalAlignment="Bottom" Margin="10" Orientation="Horizontal">
                         <ComboBox x:Name="CustomerCombo"  VerticalAlignment="Bottom"
-                          PlaceholderText="Customers" ItemsSource="{x:Bind CustomerIds}"
+                          PlaceholderText="Customers" ItemsSource="{x:Bind CustomerNames}"
                           SelectionChanged="CustomerCombo_SelectionChanged"/>
                         <StackPanel Orientation="Horizontal" Visibility="{Binding SelectedItem, ElementName=CustomerCombo, Converter={StaticResource NullItemToVisibility}}">
                             <Button x:Name="CustomerComboClearButton" Click="CustomerComboClearButton_Click">

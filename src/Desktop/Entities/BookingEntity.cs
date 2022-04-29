@@ -8,7 +8,7 @@ namespace Desktop.Entities
     {
         public int Id { get; set; }
 
-        public string CustomerName { get; set; }
+        public CustomerEntity Customer { get; set; }
 
         public int RoomId { get; set; }
 

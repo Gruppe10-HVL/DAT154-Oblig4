@@ -120,7 +120,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Entities\BookingEntity.cs" />
-    <Compile Include="Entities\CustomerAuthDto.cs" />
     <Compile Include="Entities\CustomerEntity.cs" />
     <Compile Include="Entities\RoomEntity.cs" />
     <Compile Include="Entities\ServiceTaskEntity.cs" />

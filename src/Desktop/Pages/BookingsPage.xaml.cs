@@ -27,8 +27,8 @@ namespace Desktop.Pages
     public sealed partial class BookingsPage : Page
     {
         const string Url = "https://localhost:5001/api/v1/booking";
-        Dictionary<int, string> CustomerNames = new Dictionary<int, string>();
-        List<int> CustomerIds = new List<int>();
+        List<CustomerEntity> Customers = new List<CustomerEntity>();
+        List<string> CustomerNames = new List<string>();
         List<int> RoomIds = new List<int>();
         List<BookingStatus> Statuses = new List<BookingStatus>();
         List<BookingEntity> Bookings = new List<BookingEntity>();
@@ -49,16 +49,13 @@ namespace Desktop.Pages
             var response = await httpClient.GetStringAsync(api);
             var bookings = JsonConvert.DeserializeObject<List<BookingEntity>>(response);
             Bookings = bookings;
-            // CustomerIds = Bookings.Select(x => x.CustomerName).Distinct().ToList();
-            // Bookings.Select(x => x.CustomerName).Distinct().ToList().ForEach(async x =>
-            // {
-            //     var name = await httpClient.GetStringAsync("https://localhost:5001");
-            // });
-            RoomIds = Bookings.Select(x => x.RoomId).Distinct().ToList();
+            Customers = Bookings.GroupBy(x => x.Customer.Name).Select(x => x.First()).Select(x => x.Customer).ToList();
+            CustomerNames = Customers.OrderBy(x => x.Name).Select(x => x.Name).ToList();
+            RoomIds = Bookings.OrderBy(x => x.RoomId).Select(x => x.RoomId).Distinct().ToList();
             Statuses = Bookings.Select(x => x.Status).Distinct().ToList();
-            
+
             BookingsMenu.ItemsSource = Bookings;
-            CustomerCombo.ItemsSource = CustomerIds;
+            CustomerCombo.ItemsSource = CustomerNames;
             RoomCombo.ItemsSource = RoomIds;
             BookingsStatusCombo.ItemsSource = Statuses;
         }
@@ -66,7 +63,7 @@ namespace Desktop.Pages
         private void SearchCustomerButton_QuerySubmitted(SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
         {
             var query = args.QueryText;
-            var bookings = Bookings.Where(x => x.CustomerName.Contains(query)).ToList();
+            var bookings = Bookings.Where(x => x.Customer.Name.Contains(query)).ToList();
             Bookings = bookings;
             BookingsMenu.ItemsSource = BookingsQuery;
         }
@@ -81,7 +78,7 @@ namespace Desktop.Pages
                 BookingsMenu.ItemsSource = Bookings;
             } else
             {
-                var bookings = Bookings.Where(x => x.CustomerName.Contains(query)).ToList();
+                var bookings = Bookings.Where(x => x.Customer.Name.Contains(query)).ToList();
                 Bookings = bookings;
                 BookingsMenu.ItemsSource = BookingsQuery;
             }
@@ -204,10 +201,10 @@ namespace Desktop.Pages
         private void CreateBookingButton_Click(object sender, RoutedEventArgs e)
         {
             BookingParameters parameters = new BookingParameters();
-            var item = (BookingEntity) BookingsMenu.SelectedItem;
+            //parameters.Customers = Bookings.ForEach(x => x.Customer)
 
-            //parameters.CustomerId = item.CustomerName;
-            //parameters.RoomId = item.RoomId;
+            parameters.Customers = Customers;
+            parameters.RoomIds = RoomIds;
 
             Frame.Navigate(typeof(BookingPage), parameters);
         }
@@ -241,7 +238,7 @@ namespace Desktop.Pages
             var id = combo.SelectedItem;
             List<BookingEntity> bookings = new List<BookingEntity>();
 
-            bookings = Bookings.Where(x => x.CustomerName == (string)id).ToList();
+            bookings = Bookings.Where(x => x.Customer.Name == (string)id).ToList();
             BookingsMenu.ItemsSource = bookings;
         }
 

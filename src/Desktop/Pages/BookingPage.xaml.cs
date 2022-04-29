@@ -23,7 +23,8 @@ namespace Desktop.Pages
     /// </summary>
     public sealed partial class BookingPage : Page
     {
-        private RoomDto Room;
+        private List<CustomerEntity> Customers = new List<CustomerEntity>();
+        private List<int> RoomIds = new List<int>();
         public BookingPage()
         {
             this.InitializeComponent();
@@ -31,7 +32,17 @@ namespace Desktop.Pages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //Room = (RoomDto)e.Parameter;
+            if (e.Parameter != null)
+            {
+                BookingParameters parameters = e.Parameter as BookingParameters;
+                Customers = parameters.Customers;
+                RoomIds = parameters.RoomIds;
+            }
+        }
+
+        private void CreateBookingButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

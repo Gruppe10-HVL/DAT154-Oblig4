@@ -50,7 +50,7 @@ export const Home = () => {
     }
   }, [])
 
-  const handleRoomSearch = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRoomSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (dayjs(dates[0]).isSame(dates[1], 'day')) {
@@ -59,34 +59,26 @@ export const Home = () => {
       return
     }
 
-    const filteredRooms = rooms
-      .filter(room => room.bedCount === bedCount && room.quality === quality)
-      .filter(room => {
-        const relatedBooking = bookings.filter(
-          booking => booking.roomId === room.id && booking.status !== 3,
+    await api
+      .get(
+        `https://localhost:5001/api/v1/room/available?from=${dayjs(dates[0]).format(
+          'YYYY-MM-DD',
+        )}&to=${dayjs(dates[1]).format('YYYY-MM-DD')}`,
+      )
+      .then(res => {
+        const filteredRooms = res.data.filter(
+          (room: Room) => room.bedCount === bedCount && room.quality === quality,
         )
-
-        if (relatedBooking.length === 0) return room
-
-        const fromDate = dates[0]
-        const toDate = dates[1]
-        return !relatedBooking.some(
-          booking =>
-            dayjs(booking.bookingStart).isBetween(fromDate, toDate, 'day', '()') ||
-            dayjs(booking.bookingEnd).isBetween(fromDate, toDate, 'day', '()') ||
-            dayjs(fromDate).isBetween(booking.bookingStart, booking.bookingEnd, 'day', '()') ||
-            dayjs(toDate).isBetween(booking.bookingStart, booking.bookingEnd, 'day', '()'),
-        )
+        setAvailableRooms(filteredRooms)
       })
-
-    setAvailableRooms(filteredRooms)
+      .catch(err => console.log(err.message))
   }
 
   const handleBooking = async (roomId: number) => {
     const form = {
       roomId,
-      startDate: dates[0],
-      endDate: dates[1],
+      startDate: dayjs(dates[0]).format('YYYY-MM-DD'),
+      endDate: dayjs(dates[1]).format('YYYY-MM-DD'),
     }
 
     await api
@@ -99,7 +91,7 @@ export const Home = () => {
           navigate('/bookings')
         }
       })
-      .catch(err => alert(`An error occured: ${err.message}`))
+      .catch(err => alert(`An error occured: ${err.response?.data ?? err.message}`))
   }
 
   const getRoomQuality = (quality: number): string => {
@@ -171,6 +163,9 @@ export const Home = () => {
               </button>
             </form>
             <div className="row">
+              {availableRooms.length === 0 && (
+                <p className="mt-5">Could not find any available rooms for your criterias.</p>
+              )}
               {availableRooms.map(room => {
                 return (
                   <div key={room.id} className="card bg-dark w-50">

@@ -157,5 +157,16 @@ namespace DAT154Oblig4.Api.Controllers
             return Ok(booking);
         }
 
+        /// <summary>
+        /// Delete booking 
+        /// </summary>
+        /// <remarks>Front desk endpoint</remarks>
+        [HttpDelete]
+        public async Task<ActionResult> DeleteBooking(int id)
+        {
+            var booking = await Mediator.Send(new DeleteBookingCommand() { Id = id });
+            if (booking == null) return NotFound();
+            return Ok();
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using DAT154Oblig4.Domain.Enums.Booking;
+﻿using DAT154Oblig4.Domain.Entities;
+using DAT154Oblig4.Domain.Enums.Booking;
+using Mapster;
 using System.Text.Json.Serialization;
 
 namespace DAT154Oblig4.Application.Dto
@@ -8,8 +10,8 @@ namespace DAT154Oblig4.Application.Dto
         [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [JsonPropertyName("customerId")]
-        public int CustomerId { get; set; }
+        [JsonPropertyName("customer")]
+        public CustomerDto Customer { get; set; }
 
         [JsonPropertyName("roomId")]
         public int RoomId { get; set; }
@@ -22,5 +24,6 @@ namespace DAT154Oblig4.Application.Dto
 
         [JsonPropertyName("bookingEnd")]
         public DateTime BookingEnd { get; set; }
+
     }
 }

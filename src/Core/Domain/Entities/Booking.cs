@@ -7,10 +7,9 @@ namespace DAT154Oblig4.Domain.Entities
         public int Id { get; set; }
 
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
-
+        public virtual Customer Customer { get; set; }
         public int RoomId { get; set; }
-        public Room Room { get; set; }
+        public virtual Room Room { get; set; }
 
         public BookingStatus Status { get; set; }
         public DateTime BookingStart { get; set; }

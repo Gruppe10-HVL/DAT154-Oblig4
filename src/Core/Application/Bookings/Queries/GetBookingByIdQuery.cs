@@ -25,7 +25,7 @@ namespace DAT154Oblig4.Application.Bookings.Queries
 
         public async Task<BookingDto> Handle(GetBookingByIdQuery request, CancellationToken cancellationToken)
         {
-            var booking = await _context.Bookings.Where(x => x.Id == request.Id).FirstOrDefaultAsync(cancellationToken);
+            var booking = await _context.Bookings.Where(x => x.Id == request.Id).Include(x => x.Customer).FirstOrDefaultAsync(cancellationToken);
 
             return _mapper.Map<BookingDto>(booking);
         }

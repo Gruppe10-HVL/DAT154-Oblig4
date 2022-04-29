@@ -18,8 +18,8 @@ namespace DAT154Oblig4.Application.Bookings.Commands
         {
             CustomerId = customerId;
             RoomId = roomId;
-            StartDate = startDate;
-            EndDate = endDate;
+            StartDate = startDate.Date;
+            EndDate = endDate.Date;
         }
 
     }
@@ -37,10 +37,23 @@ namespace DAT154Oblig4.Application.Bookings.Commands
 
         public async Task<BookingDto> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
         {
-            var booking = new Booking(request.CustomerId, request.RoomId, request.StartDate, request.EndDate);
-            await _context.Bookings.AddAsync(booking, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            //Check if there are any active bookings for period
+            var existingBookings = _context.Bookings.Any(x => x.RoomId == request.RoomId && !(
+                (x.BookingStart <= request.StartDate && x.BookingEnd >= request.StartDate) ||
+                (x.BookingStart <= request.EndDate && x.BookingEnd >= request.EndDate) ||
+                (request.StartDate <= x.BookingStart && request.EndDate >= x.BookingStart) ||
+                (request.StartDate <= x.BookingEnd && request.EndDate >= x.BookingEnd)));
 
+            //Return null if there are existing bookings in requested range.
+            //Could be implemented more cleanly if all Handle-methods were wrapped by a ServiceResult class.
+            if(existingBookings) return null;
+
+            var booking = new Booking(request.CustomerId, request.RoomId, request.StartDate, request.EndDate);
+            _context.Bookings.Attach(booking);
+            await _context.SaveChangesAsync(cancellationToken);
+            
+            //Explicitly load customer navigational property
+            await _context.Entry(booking).Reference("Customer").LoadAsync();
             return _mapper.Map<BookingDto>(booking);
         }
     }

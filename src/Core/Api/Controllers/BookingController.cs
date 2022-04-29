@@ -82,13 +82,12 @@ namespace DAT154Oblig4.Api.Controllers
         /// <remarks>Customer endpoint</remarks>
         [HttpPost("customer")]
         [Authorize]
-        public async Task<ActionResult<BookingDto>> CreateOwnBooking(CreateBookingCommand request)
+        public async Task<ActionResult<BookingDto>> CreateOwnBooking(int roomId, DateTime startDate, DateTime endDate)
         {
             var customerId = CustomerId;
             if (customerId == -1) return BadRequest();
-            request.CustomerId = customerId;
-            var booking = await Mediator.Send(request);
-            if (booking == null) return BadRequest();
+            var booking = await Mediator.Send(new CreateBookingCommand(customerId, roomId, startDate, endDate));
+            if (booking == null) return BadRequest("The requested room is already booked for this period");
             return Ok(booking);
         }
 
@@ -100,7 +99,7 @@ namespace DAT154Oblig4.Api.Controllers
         public async Task<ActionResult<BookingDto>> CreateBookingForCustomer(CreateBookingCommand request)
         {
             var booking = await Mediator.Send(request);
-            if (booking == null) return BadRequest();
+            if (booking == null) return BadRequest("The requested room is already booked for this period");
             return Ok(booking);
         }
 
@@ -158,5 +157,16 @@ namespace DAT154Oblig4.Api.Controllers
             return Ok(booking);
         }
 
+        /// <summary>
+        /// Delete booking 
+        /// </summary>
+        /// <remarks>Front desk endpoint</remarks>
+        [HttpDelete]
+        public async Task<ActionResult> DeleteBooking(int id)
+        {
+            var booking = await Mediator.Send(new DeleteBookingCommand() { Id = id });
+            if (booking == null) return NotFound();
+            return Ok();
+        }
     }
 }

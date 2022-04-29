@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -144,7 +145,6 @@ namespace Desktop.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                // TODO: Send ServiceTask
                 ContentDialog createServiceTaskDialog = new ContentDialog
                 {
                     Title = "Service Task",
@@ -157,16 +157,40 @@ namespace Desktop.Pages
 
                 if (result == ContentDialogResult.Primary)
                 {
-                    // TODO: Create service task
-                    Console.WriteLine("Here");
+                    ServiceTask serviceTask = new ServiceTask
+                    {
+                        roomId = booking.RoomId,
+                        description = "Cleaning",
+                        taskType = ServiceTaskType.Cleaning,
+                        taskStatus = ServiceTaskStatus.New,
+                        priority = ServiceTaskPriority.MEDIUM,
+                        notes = "",
+                    };
+
+                    using (var client = new HttpClient())
+                    {
+                        api = "https://localhost:5001/api/v1/task";
+                        string json = JsonConvert.SerializeObject(serviceTask, Formatting.Indented);
+                        HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                        response = await client.PostAsync(api, content);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            ContentDialog serviceTaskGeneratedDialog = new ContentDialog
+                            {
+                                Title = "Service task successfully generated",
+                                Content = String.Format("Service task generated for room {0}", serviceTask.roomId),
+                                CloseButtonText = "Ok"
+                            };
+                            await serviceTaskGeneratedDialog.ShowAsync();
+                        }
+                    }
                 } else
                 {
 
                 }
-
                 GetBookings();
             }
-                
         }
 
         private async void DeleteBookingButton_Click(object sender, RoutedEventArgs e)
@@ -190,12 +214,60 @@ namespace Desktop.Pages
             HttpClient httpClient = new HttpClient(clientHandler);
             httpClient.Timeout = TimeSpan.FromSeconds(30);
 
+            var api = Url + "/?id=";
+            var request = new HttpRequestMessage(new HttpMethod("DELETE"), api + booking.Id);
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                ContentDialog deleteSuccessDialog = new ContentDialog
+                {
+                    Title = "Booking deleted successfully",
+                    Content = String.Format("Booking {0} deleted successfully", booking.Id),
+                    CloseButtonText = "Ok"
+                };
+
+                await deleteSuccessDialog.ShowAsync();
+
+                GetBookings();
+            }
+        }
+        private async void CancelBookingButton_Click(object sender, RoutedEventArgs e)
+        {
+            BookingEntity booking = (BookingEntity)BookingsMenu.SelectedItem;
+            if (booking == null)
+            {
+                ContentDialog invalidCancelOptionDialog = new ContentDialog
+                {
+                    Title = "No booking selected",
+                    Content = "Select a booking to cancel.",
+                    CloseButtonText = "Ok"
+                };
+
+                await invalidCancelOptionDialog.ShowAsync();
+
+                return;
+            }
+
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            HttpClient httpClient = new HttpClient(clientHandler);
+            httpClient.Timeout = TimeSpan.FromSeconds(30);
+
             var api = Url + "/cancel/?id=";
             var request = new HttpRequestMessage(new HttpMethod("PATCH"), api + booking.Id);
             var response = await httpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
-                GetBookings();
+            {
+                ContentDialog cancelSuccessDialog = new ContentDialog
+                {
+                    Title = "Cancellation",
+                    Content = String.Format("Booking {0} cancelled", booking.Id),
+                    CloseButtonText = "Ok"
+                };
+
+                await cancelSuccessDialog.ShowAsync();
+            }
         }
 
         private void CreateBookingButton_Click(object sender, RoutedEventArgs e)
@@ -269,6 +341,8 @@ namespace Desktop.Pages
             BookingsStatusCombo.SelectedItem = null;
             BookingsMenu.ItemsSource = Bookings;
         }
+
+
     }
 
     public class NullItemToVisibility : IValueConverter

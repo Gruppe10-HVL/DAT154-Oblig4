@@ -136,6 +136,13 @@
                             <TextBlock Text="Create new booking" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
+                    <Button x:Name="CancelBookingButton" Margin="10" HorizontalAlignment="Right"
+                        Click="CancelBookingButton_Click">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <SymbolIcon Symbol="Cancel" VerticalAlignment="Center"/>
+                            <TextBlock Text="Cancel booking" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                     <Button x:Name="DeleteBookingButton" Margin="10" HorizontalAlignment="Right"
                         Click="DeleteBookingButton_Click">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">

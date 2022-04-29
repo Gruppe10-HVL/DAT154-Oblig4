@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
@@ -33,7 +34,13 @@
                 <!-- Customer Input -->
                 <StackPanel x:Name="Customer" Margin="20">
                     <TextBlock Text="Customer:"/>
-                    <ComboBox x:Name="CustomerCombo" MinWidth="300" ItemsSource="{x:Bind Customers}"/>
+                    <ComboBox x:Name="CustomerCombo" MinWidth="300" ItemsSource="{x:Bind Customers}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
                 
                 <!-- Room Input -->
@@ -44,10 +51,12 @@
                 
                 <!-- Date Pickers -->
                 <StackPanel Grid.Row="2" x:Name="Dates" Margin="20">
-                    <CalendarDatePicker x:Name="StartDatePicker" Width="300"
-                                        PlaceholderText="Choose booking start date: " Header="Start: "/>
-                    <CalendarDatePicker x:Name="EndDatePicker" Width="300"
-                                        PlaceholderText="Chose booking end date: " Header="End: "/>
+                    <CalendarDatePicker x:Name="BookingStartDatePicker" Width="300"
+                                        PlaceholderText="Choose booking start date: " Header="Start: "
+                                        DateChanged="StartDatePicker_DateChanged"/>
+                    <CalendarDatePicker x:Name="BookingEndDatePicker" Width="300"
+                                        PlaceholderText="Choose booking end date: " Header="End: "
+                                        DateChanged="EndDatePicker_DateChanged"/>
                 </StackPanel>
 
                 <Grid Grid.Row="3">
@@ -63,12 +72,18 @@
                     <!-- Customers Menu -->
                     <TextBlock Text="Customers" Margin="20" />
                     <ListView Grid.Row="1" x:Name="CustomersMenu" Margin="20" ItemsSource="{x:Bind Customers}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="IsHitTestVisible" Value="false"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.HeaderTemplate>
                             <DataTemplate>
                                 <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="100*"/>
+                                        <ColumnDefinition Width="100*"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Customer" Style="{ThemeResource CaptionTextBlockStyle}"/>
                                     <TextBlock Grid.Column="1" Text="Id" Style="{ThemeResource CaptionTextBlockStyle}"/>
@@ -77,13 +92,13 @@
                         </ListView.HeaderTemplate>
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="entity:CustomerEntity">
-                                <Grid Height="48" AutomationProperties.Name="{x:Bind Id}">
+                                <Grid Height="48" AutomationProperties.Name="{x:Bind Name}">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="250*"/>
+                                        <ColumnDefinition Width="250*"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{x:Bind Name}"/>
-                                    <TextBlock Grid.Column="1" Text="{x:Bind Id}"/>
+                                    <TextBlock Text="{x:Bind Name}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{x:Bind Id}" VerticalAlignment="Center"/>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -92,6 +107,11 @@
                     <!-- Available Rooms Menu -->
                     <TextBlock Grid.Column="1" Text="Available Rooms" Margin="20" />
                     <ListView Grid.Column="1" Grid.Row="1" x:Name="AvailableRoomsMenu" Margin="20" ItemsSource="{x:Bind RoomIds}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="IsHitTestVisible" Value="false"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.HeaderTemplate>
                             <DataTemplate>
                                 <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
@@ -105,6 +125,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="1*"/>
                                     </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding }" VerticalAlignment="Center"/>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>

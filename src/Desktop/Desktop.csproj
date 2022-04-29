@@ -119,9 +119,11 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Booking.cs" />
     <Compile Include="Entities\BookingEntity.cs" />
     <Compile Include="Entities\CustomerEntity.cs" />
     <Compile Include="Entities\RoomEntity.cs" />
+    <Compile Include="Entities\ServiceTask.cs" />
     <Compile Include="Entities\ServiceTaskEntity.cs" />
     <Compile Include="Enums\Booking\BookingStatus.cs" />
     <Compile Include="Enums\Room\RoomQuality.cs" />

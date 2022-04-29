@@ -4,11 +4,11 @@ using System;
 
 namespace Desktop.Entities
 {
-    public class BookingDto
+    public class BookingEntity
     {
         public int Id { get; set; }
 
-        public string CustomerName{ get; set; }
+        public string CustomerName { get; set; }
 
         public int RoomId { get; set; }
 

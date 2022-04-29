@@ -27,11 +27,12 @@ namespace Desktop.Pages
     public sealed partial class BookingsPage : Page
     {
         const string Url = "https://localhost:5001/api/v1/booking";
+        Dictionary<int, string> CustomerNames = new Dictionary<int, string>();
         List<int> CustomerIds = new List<int>();
         List<int> RoomIds = new List<int>();
         List<BookingStatus> Statuses = new List<BookingStatus>();
-        List<BookingDto> Bookings = new List<BookingDto>();
-        List<BookingDto> BookingsQuery = new List<BookingDto>();
+        List<BookingEntity> Bookings = new List<BookingEntity>();
+        List<BookingEntity> BookingsQuery = new List<BookingEntity>();
         public BookingsPage()
         {
             this.InitializeComponent();
@@ -46,11 +47,16 @@ namespace Desktop.Pages
 
             var api = Url;
             var response = await httpClient.GetStringAsync(api);
-            var bookings = JsonConvert.DeserializeObject<List<BookingDto>>(response);
+            var bookings = JsonConvert.DeserializeObject<List<BookingEntity>>(response);
             Bookings = bookings;
-            //CustomerIds = Bookings.Select(x => x.CustomerName).Distinct().ToList();
+            // CustomerIds = Bookings.Select(x => x.CustomerName).Distinct().ToList();
+            // Bookings.Select(x => x.CustomerName).Distinct().ToList().ForEach(async x =>
+            // {
+            //     var name = await httpClient.GetStringAsync("https://localhost:5001");
+            // });
             RoomIds = Bookings.Select(x => x.RoomId).Distinct().ToList();
             Statuses = Bookings.Select(x => x.Status).Distinct().ToList();
+            
             BookingsMenu.ItemsSource = Bookings;
             CustomerCombo.ItemsSource = CustomerIds;
             RoomCombo.ItemsSource = RoomIds;
@@ -84,7 +90,7 @@ namespace Desktop.Pages
 
         private async void CheckinButton_Click(object sender, RoutedEventArgs e)
         {
-            BookingDto booking = (BookingDto)BookingsMenu.SelectedItem;
+            BookingEntity booking = (BookingEntity)BookingsMenu.SelectedItem;
 
             if (booking.BookingStart > DateTime.Now)
             {
@@ -114,7 +120,7 @@ namespace Desktop.Pages
 
         private async void CheckoutButton_Click(object sender, RoutedEventArgs e)
         {
-            BookingDto booking = (BookingDto)BookingsMenu.SelectedItem;
+            BookingEntity booking = (BookingEntity)BookingsMenu.SelectedItem;
 
             if (!booking.Status.Equals(BookingStatus.CheckedIn))
             {
@@ -168,7 +174,7 @@ namespace Desktop.Pages
 
         private async void DeleteBookingButton_Click(object sender, RoutedEventArgs e)
         {
-            BookingDto booking = (BookingDto)BookingsMenu.SelectedItem;
+            BookingEntity booking = (BookingEntity)BookingsMenu.SelectedItem;
             if (booking == null)
             {
                 ContentDialog invalidDeleteOptionDialog = new ContentDialog
@@ -197,7 +203,13 @@ namespace Desktop.Pages
 
         private void CreateBookingButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(BookingPage));
+            BookingParameters parameters = new BookingParameters();
+            var item = (BookingEntity) BookingsMenu.SelectedItem;
+
+            //parameters.CustomerId = item.CustomerName;
+            //parameters.RoomId = item.RoomId;
+
+            Frame.Navigate(typeof(BookingPage), parameters);
         }
 
         private void RoomCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -207,7 +219,7 @@ namespace Desktop.Pages
             if (combo.SelectedItem == null) return;
 
             var id = combo.SelectedItem;
-            List<BookingDto> bookings = new List<BookingDto>();
+            List<BookingEntity> bookings = new List<BookingEntity>();
 
             bookings = Bookings.Where(x => x.RoomId == (int)id).ToList();
             BookingsMenu.ItemsSource = bookings;
@@ -227,7 +239,7 @@ namespace Desktop.Pages
             if (combo.SelectedItem == null) return;
 
             var id = combo.SelectedItem;
-            List<BookingDto> bookings = new List<BookingDto>();
+            List<BookingEntity> bookings = new List<BookingEntity>();
 
             bookings = Bookings.Where(x => x.CustomerName == (string)id).ToList();
             BookingsMenu.ItemsSource = bookings;
@@ -249,7 +261,7 @@ namespace Desktop.Pages
             }
 
             var status = combo.SelectedItem;
-            List<BookingDto> bookings = new List<BookingDto>();
+            List<BookingEntity> bookings = new List<BookingEntity>();
 
             bookings = Bookings.Where(x => x.Status == (BookingStatus)status).ToList();
             BookingsMenu.ItemsSource = bookings;

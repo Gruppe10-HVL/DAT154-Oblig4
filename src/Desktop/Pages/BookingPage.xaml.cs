@@ -31,7 +31,7 @@ namespace Desktop.Pages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Room = (RoomDto)e.Parameter;
+            //Room = (RoomDto)e.Parameter;
         }
     }
 }

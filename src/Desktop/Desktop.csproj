@@ -119,12 +119,11 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Entities\BookingDto.cs" />
+    <Compile Include="Entities\BookingEntity.cs" />
     <Compile Include="Entities\CustomerAuthDto.cs" />
-    <Compile Include="Entities\CustomerDto.cs" />
-    <Compile Include="Entities\RoomDto.cs" />
+    <Compile Include="Entities\CustomerEntity.cs" />
     <Compile Include="Entities\RoomEntity.cs" />
-    <Compile Include="Entities\ServiceTaskDto.cs" />
+    <Compile Include="Entities\ServiceTaskEntity.cs" />
     <Compile Include="Enums\Booking\BookingStatus.cs" />
     <Compile Include="Enums\Room\RoomQuality.cs" />
     <Compile Include="Enums\ServiceTask\ServiceTaskPriority.cs" />
@@ -142,6 +141,7 @@
     <Compile Include="Pages\CustomersPage.xaml.cs">
       <DependentUpon>CustomersPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Parameters\BookingParameters.cs" />
     <Compile Include="Pages\RoomsPage.xaml.cs">
       <DependentUpon>RoomsPage.xaml</DependentUpon>
     </Compile>

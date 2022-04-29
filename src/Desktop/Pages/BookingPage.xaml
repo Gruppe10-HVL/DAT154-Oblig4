@@ -9,20 +9,37 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <ListView x:Name="asd">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!-- Topbar -->
+            <Grid>
+                <TextBlock Text="Booking" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
             
-        </ListView>
-        <TextBlock Text="Reservasjon" HorizontalAlignment="Left" Margin="616,10,0,0" VerticalAlignment="Top" FontFamily="Segoe UI Black" FontSize="18" RenderTransformOrigin="0.996,0.565"/>
-        <TextBox x:Name="ReservasjonsBox" HorizontalAlignment="Left" Height="22" Margin="10,390,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105"/>
-        <ComboBox x:Name="RomIDBox" HorizontalAlignment="Left" Margin="120,390,0,0" VerticalAlignment="Top" Width="59"/>
-        <ComboBox x:Name="KundeIDBox" HorizontalAlignment="Left" Margin="184,390,0,0" VerticalAlignment="Top" Width="95" Height="22"/>
-        <ComboBox x:Name="ReservasjonStatusBox" HorizontalAlignment="Left" Margin="284,390,0,0" VerticalAlignment="Top" Width="120" Height="22">
-            <ComboBoxItem Content="Avslått" IsSelected="True"/>
-            <ComboBoxItem Content="Pågående"/>
-            <ComboBoxItem Content="Godkjent"/>
-        </ComboBox>
-        <DatePicker x:Name="FraDatoBox" HorizontalAlignment="Left" Margin="409,390,0,0" VerticalAlignment="Top" Height="22" Width="92"/>
-        <DatePicker x:Name="TilDatoBox" HorizontalAlignment="Left" Margin="506,390,0,0" VerticalAlignment="Top" Width="105" Height="22"/>
+            <!-- Form Content -->
+            <Grid Grid.Row="1" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel x:Name="Customer" Margin="20">
+                    <TextBlock Text="Customer:"/>
+                    <TextBox />
+                </StackPanel>
+                <StackPanel Grid.Row="1" Margin="20">
+                    <CalendarDatePicker x:Name="StartDatePicker" PlaceholderText="Choose booking start date: " Header="Start: "/>
+                    <CalendarDatePicker x:Name="EndDatePicker" PlaceholderText="Chose booking end date: " Header="End: "/>
+                </StackPanel>
+            </Grid>
+            
+            <!-- Footer -->
+            <Grid Grid.Row="2">
+                
+            </Grid>
+        </Grid>
     </Grid>
-
 </Page>

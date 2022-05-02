@@ -10,14 +10,80 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel x:Name="MainStackPanel">
-            <StackPanel x:Name="DatePickerStackPanel" Orientation="Horizontal">
-                <DatePicker x:Name="StartDatePicker" Header="Checkin:" SelectedDateChanged="StartDatePicker_SelectedDateChanged"/>
-                <DatePicker x:Name="EndDatePicker" Header="Checkout:" SelectedDateChanged="EndDatePicker_SelectedDateChanged"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Rooms" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+        <!-- Form Content -->
+        <Grid Grid.Row="1" x:Name="FormGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="800"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <!-- RoomId Input -->
+                <StackPanel x:Name="RoomIdPanel" Margin="20">
+                    <TextBlock Text="Room ID:" />
+                    <ComboBox x:Name="RoomIdCombo" MinWidth="300" ItemsSource="{x:Bind RoomIds}">
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- Task Type Input -->
+                <StackPanel x:Name="TaskTypePanel" Margin="20">
+                    <TextBlock Text="Task Type:" />
+                    <ComboBox x:Name="TaskTypeCombo" MinWidth="300" ItemsSource="{x:Bind TaskTypes}">
+                    </ComboBox>
+                </StackPanel>
             </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <!-- Task Status Input-->
+                <StackPanel x:Name="TaskStatusPanel" Margin="20">
+                    <TextBlock Text="Task Status:" />
+                    <ComboBox x:Name="TaskStatusCombo" MinWidth="300" ItemsSource="{x:Bind TaskStatuses}">
+                    </ComboBox>
+                </StackPanel>
+                <!-- Task Priority Input -->
+                <StackPanel x:Name="TaskPriorityPanel" Margin="20">
+                    <TextBlock Text="Task Priority:" />
+                    <ComboBox x:Name="TaskPriorityCombo" MinWidth="300" ItemsSource="{x:Bind TaskPriorities}">
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <!-- Description Input -->
+                <Grid Margin="20">
+                    <TextBox x:Name="DescriptionInput" Header="Description:" Width="300" Height="100" HorizontalAlignment="Left"/>
+                </Grid>
+                <!-- Task Notes Input -->
+                <Grid Margin="20">
+                    <TextBox x:Name="NotesInput" Header="Notes:" Width="300" Height="100" HorizontalAlignment="Left"/>
+                </Grid>
+            </StackPanel>
+
+            <Grid Grid.Column="1" Grid.Row="1" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="SubmitServiceTaskButton" Content="Submit Task"
+                        Width="300"
+                        Click="SubmitServiceTaskButton_Click" />
+            </Grid>
+        </Grid>
+        
+        <!-- Customer List -->
+        <StackPanel Grid.Row="2" x:Name="MainStackPanel" Margin="20">
             <ListView x:Name="RoomsMenu" ItemsSource="{x:Bind Rooms}" 
-                      IsItemClickEnabled="True"
-                      ItemClick="RoomsMenu_ItemClick">
+                      ScrollViewer.VerticalScrollMode="Enabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

@@ -126,8 +126,6 @@ namespace DAT154Oblig4.Api.Controllers
         {
             var booking = await Mediator.Send(new ChangeBookingStatusCommand() { Id = id, Status = BookingStatus.CheckedOut });
             if (booking == null) return NotFound();
-            var newServiceTask = await Mediator.Send(new CreateServiceTaskCommand(booking.RoomId, "Cleanup on checkout",ServiceTaskType.Cleaning,ServiceTaskStatus.New,ServiceTaskPriority.MEDIUM,"None"));
-            if (newServiceTask == null) Console.WriteLine("Automatic Cleanup Task Failed");
             return Ok(booking);
         }
 

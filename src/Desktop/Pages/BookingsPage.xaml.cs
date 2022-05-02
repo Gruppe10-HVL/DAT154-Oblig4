@@ -268,6 +268,7 @@ namespace Desktop.Pages
 
                 await cancelSuccessDialog.ShowAsync();
             }
+            GetBookings();
         }
 
         private void CreateBookingButton_Click(object sender, RoutedEventArgs e)

@@ -152,5 +152,31 @@ namespace Desktop.Pages
 
             invalidInputFlyout.ShowAt(element);
         }
+
+        private async void RoomsMenu_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            RoomEntity room = (RoomEntity)e.ClickedItem;
+            int roomId = room.Id;
+
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            HttpClient client = new HttpClient(clientHandler);
+            client.Timeout = TimeSpan.FromSeconds(30);
+
+            var api = ServiceUrl + "/room/";
+            var response = await client.GetStringAsync(api + roomId);
+            var tasks = JsonConvert.DeserializeObject<List<ServiceTaskEntity>>(response);
+            var notes = tasks.Where(x => x.TaskStatus == 0).Select(x => x.Notes);
+            ListView notesList = new ListView();
+            notesList.ItemsSource = notes;
+
+            ContentDialog notesDialog = new ContentDialog
+            {
+                Title = String.Format("Room {0} notes", roomId),
+                Content = notesList,
+                CloseButtonText = "Ok",
+            };
+
+            await notesDialog.ShowAsync();
+        }
     }
 }

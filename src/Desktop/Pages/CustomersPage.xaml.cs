@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Desktop.Entities;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -22,9 +25,25 @@ namespace Desktop.Pages
     /// </summary>
     public sealed partial class CustomersPage : Page
     {
+        const string Url = "https://localhost:5001/api/v1/customer";
+        public List<CustomerEntity> Customers = new List<CustomerEntity>();
         public CustomersPage()
         {
             this.InitializeComponent();
+            GetCustomers();
+        }
+
+        async void GetCustomers()
+        {
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            HttpClient client = new HttpClient(clientHandler);
+            client.Timeout = TimeSpan.FromSeconds(30);
+
+            var api = Url;
+            var response = await client.GetStringAsync(api);
+            var customers = JsonConvert.DeserializeObject<List<CustomerEntity>>(response);
+            Customers = customers;
+            CustomersMenu.ItemsSource = Customers;
         }
     }
 }

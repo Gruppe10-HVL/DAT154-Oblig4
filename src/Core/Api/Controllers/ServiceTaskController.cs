@@ -36,7 +36,7 @@ namespace DAT154Oblig4.Api.Controllers
         /// Get service task by id
         /// </summary>
         [HttpGet("room/{id}")]
-        public async Task<ActionResult<ServiceTaskDto>> GetServiceTaskByRoomId(int id)
+        public async Task<ActionResult<IEnumerable<ServiceTaskDto>>> GetServiceTasksByRoomId(int id)
         {
             var servicetask = await Mediator.Send(new GetServiceTaskByRoomIdQuery() { Id = id });
             if (servicetask == null) return NotFound();
